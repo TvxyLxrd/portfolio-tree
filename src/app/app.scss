@@ -521,6 +521,21 @@ button {
     text-overflow: ellipsis;
   }
 
+  .p-select.instrument-select .p-select-label,
+  .p-iconfield.filter-search .p-inputtext {
+    color: #5f6878;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .p-select.instrument-select .p-select-label::placeholder,
+  .p-iconfield.filter-search .p-inputtext::placeholder {
+    color: #5f6878;
+    opacity: 1;
+  }
+
   .p-select.portfolio-select .p-select-dropdown,
   .p-select.instrument-select .p-select-dropdown {
     display: flex;
