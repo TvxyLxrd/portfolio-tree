@@ -67,16 +67,16 @@ export class App {
     resizable: true,
     suppressHeaderMenuButton: true,
     suppressHeaderFilterButton: true,
-    minWidth: 110,
-    flex: 1,
+    width: 120,
+    minWidth: 80,
   };
 
   protected readonly autoGroupColumnDef: ColDef<PortfolioRow> = {
     field: 'name',
     headerName: '',
     pinned: 'left',
-    minWidth: 290,
-    flex: 1.7,
+    width: 240,
+    minWidth: 160,
     cellRendererParams: {
       suppressCount: true,
     },
@@ -91,21 +91,17 @@ export class App {
     {
       field: 'ticker',
       headerName: '',
-      minWidth: 95,
-      maxWidth: 115,
       cellClass: 'ticker-cell',
     },
     {
       field: 'price',
       headerName: '',
-      minWidth: 110,
       valueFormatter: this.currencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'dayChange',
       headerName: '',
-      minWidth: 105,
       valueFormatter: this.percentFormatter,
       cellClassRules: this.changeClassRules,
       type: 'numericColumn',
@@ -113,21 +109,18 @@ export class App {
     {
       field: 'weight',
       headerName: '',
-      minWidth: 110,
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'marketValue',
       headerName: '',
-      minWidth: 145,
       valueFormatter: this.integerCurrencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'pnl',
       headerName: '',
-      minWidth: 120,
       valueFormatter: this.signedCurrencyFormatter,
       cellClassRules: this.changeClassRules,
       type: 'numericColumn',
@@ -135,30 +128,24 @@ export class App {
     {
       field: 'pe',
       headerName: '',
-      minWidth: 90,
-      maxWidth: 105,
       valueFormatter: this.decimalFormatter,
       type: 'numericColumn',
     },
     {
       field: 'dividendYield',
       headerName: '',
-      minWidth: 110,
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'beta',
       headerName: '',
-      minWidth: 90,
-      maxWidth: 105,
       valueFormatter: this.decimalFormatter,
       type: 'numericColumn',
     },
     {
       field: 'sector',
       headerName: '',
-      minWidth: 150,
     },
   ];
 
@@ -211,18 +198,25 @@ export class App {
 
   private applyResponsiveGrid(): void {
     const mobile = window.innerWidth <= 760;
+    const columnWidth = mobile ? 96 : 120;
 
     this.gridApi?.setGridOption('defaultColDef', {
       ...this.defaultColDef,
-      minWidth: mobile ? 88 : 110,
+      width: columnWidth,
+      minWidth: mobile ? 72 : 80,
     });
     this.gridApi?.setGridOption('autoGroupColumnDef', {
       ...this.autoGroupColumnDef,
       pinned: mobile ? null : 'left',
-      minWidth: mobile ? 170 : 290,
-      width: mobile ? 170 : undefined,
-      flex: mobile ? undefined : 1.7,
+      minWidth: mobile ? 160 : 200,
+      width: mobile ? 168 : 240,
     });
+    this.gridApi?.setColumnWidths(
+      this.columnOptions.map((option) => ({
+        key: String(option.field),
+        newWidth: columnWidth,
+      })),
+    );
   }
 
   private currencyFormatter(params: ValueFormatterParams<PortfolioRow, number>): string {

@@ -354,6 +354,9 @@ button {
   display: block;
   width: 100%;
   height: 100%;
+  --visual-column-width: 120px;
+  --visual-row-height: 44px;
+  --visual-grid-line: #e4e9f0;
   --ag-font-family: Inter, "Segoe UI", sans-serif;
   --ag-font-size: 13px;
   --ag-foreground-color: #273044;
@@ -417,13 +420,36 @@ button {
   .portfolio-grid .ag-center-cols-viewport,
   .portfolio-grid .ag-center-cols-container {
     min-height: 100%;
-    background-image: repeating-linear-gradient(
+    background-color: #fff;
+    background-image:
+      linear-gradient(
+        to right,
+        transparent calc(var(--visual-column-width) - 1px),
+        var(--visual-grid-line) calc(var(--visual-column-width) - 1px),
+        var(--visual-grid-line) var(--visual-column-width)
+      ),
+      linear-gradient(
+        to bottom,
+        transparent calc(var(--visual-row-height) - 1px),
+        var(--visual-grid-line) calc(var(--visual-row-height) - 1px),
+        var(--visual-grid-line) var(--visual-row-height)
+      );
+    background-size:
+      var(--visual-column-width) 100%,
+      100% var(--visual-row-height);
+  }
+
+  .portfolio-grid .ag-pinned-left-cols-viewport,
+  .portfolio-grid .ag-pinned-left-cols-container {
+    min-height: 100%;
+    background-color: #fff;
+    background-image: linear-gradient(
       to bottom,
-      transparent 0,
-      transparent 43px,
-      #edf0f4 43px,
-      #edf0f4 44px
+      transparent calc(var(--visual-row-height) - 1px),
+      var(--visual-grid-line) calc(var(--visual-row-height) - 1px),
+      var(--visual-grid-line) var(--visual-row-height)
     );
+    background-size: 100% var(--visual-row-height);
   }
 
   .portfolio-drawer {
@@ -595,6 +621,8 @@ button {
 
   .portfolio-grid {
     min-width: 0;
+    --visual-column-width: 96px;
+    --visual-row-height: 40px;
     --ag-font-size: 12px;
     --ag-header-height: 40px;
     --ag-row-height: 40px;
