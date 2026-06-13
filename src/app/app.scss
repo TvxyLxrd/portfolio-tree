@@ -1,4 +1,5 @@
 :host {
+  --drawer-width: clamp(320px, 31vw, 470px);
   --ink: #172033;
   --muted: #6f7785;
   --line: #e4e9f0;
@@ -27,8 +28,18 @@ button {
   grid-template-rows: 74px 76px minmax(0, 1fr);
   height: 100dvh;
   min-width: 0;
+  width: 100%;
+  margin-left: 0;
   background: var(--surface);
   overflow: hidden;
+  transition:
+    width 240ms ease,
+    margin-left 240ms ease;
+}
+
+.workspace.drawer-open {
+  width: calc(100% - var(--drawer-width));
+  margin-left: var(--drawer-width);
 }
 
 .topbar,
@@ -76,6 +87,11 @@ button {
   font-weight: 800;
   background: linear-gradient(145deg, #2b66ef, #173fc2);
   box-shadow: 0 6px 16px rgba(36, 89, 224, 0.22);
+}
+
+.drawer-header .brand-mark {
+  width: 34px;
+  height: 34px;
 }
 
 .header-actions,
@@ -534,6 +550,7 @@ button {
   border: 1px solid #e6ebf2;
   border-radius: 14px;
   background: linear-gradient(145deg, #f8faff, #fff);
+  min-height: 68px;
 
   div {
     display: grid;
@@ -578,6 +595,7 @@ button {
   }
 
   button {
+    margin-left: auto;
     width: 32px;
     height: 32px;
     border-radius: 9px;
@@ -595,7 +613,6 @@ button {
 .tree-empty {
   display: grid;
   place-items: center;
-  gap: 7px;
   padding: 54px 20px;
   color: #465064;
   text-align: center;
@@ -630,7 +647,6 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
     flex: 1;
     height: 42px;
     border: 1px solid #d8dee7;
@@ -667,6 +683,10 @@ button {
 }
 
 @media (max-width: 760px) {
+  :host {
+    --drawer-width: min(82vw, 320px);
+  }
+
   .workspace {
     grid-template-rows: 62px auto minmax(0, 1fr);
   }

@@ -49,16 +49,16 @@ export class App {
   protected readonly treeNodes: TreeNode[] = [];
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
-    { field: 'ticker', label: 'Ticker' },
-    { field: 'price', label: 'Price' },
-    { field: 'dayChange', label: 'Day %' },
-    { field: 'weight', label: 'Weight' },
-    { field: 'marketValue', label: 'Market value' },
-    { field: 'pnl', label: 'P&L' },
-    { field: 'pe', label: 'P/E' },
-    { field: 'dividendYield', label: 'Dividend' },
-    { field: 'beta', label: 'Beta' },
-    { field: 'sector', label: 'Sector' },
+    { field: 'ticker', label: '' },
+    { field: 'price', label: '' },
+    { field: 'dayChange', label: '' },
+    { field: 'weight', label: '' },
+    { field: 'marketValue', label: '' },
+    { field: 'pnl', label: '' },
+    { field: 'pe', label: '' },
+    { field: 'dividendYield', label: '' },
+    { field: 'beta', label: '' },
+    { field: 'sector', label: '' },
   ];
   protected readonly gridTheme = themeQuartz;
 
@@ -74,7 +74,7 @@ export class App {
 
   protected readonly autoGroupColumnDef: ColDef<PortfolioRow> = {
     field: 'name',
-    headerName: 'Instrument / group',
+    headerName: '',
     pinned: 'left',
     minWidth: 290,
     flex: 1.7,
@@ -91,21 +91,21 @@ export class App {
   protected readonly columnDefs: ColDef<PortfolioRow>[] = [
     {
       field: 'ticker',
-      headerName: 'Ticker',
+      headerName: '',
       minWidth: 95,
       maxWidth: 115,
       cellClass: 'ticker-cell',
     },
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: '',
       minWidth: 110,
       valueFormatter: this.currencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'dayChange',
-      headerName: 'Day %',
+      headerName: '',
       minWidth: 105,
       valueFormatter: this.percentFormatter,
       cellClassRules: this.changeClassRules,
@@ -114,21 +114,21 @@ export class App {
     },
     {
       field: 'weight',
-      headerName: 'Weight',
+      headerName: '',
       minWidth: 110,
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'marketValue',
-      headerName: 'Market value',
+      headerName: '',
       minWidth: 145,
       valueFormatter: this.integerCurrencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'pnl',
-      headerName: 'P&L',
+      headerName: '',
       minWidth: 120,
       valueFormatter: this.signedCurrencyFormatter,
       cellClassRules: this.changeClassRules,
@@ -136,7 +136,7 @@ export class App {
     },
     {
       field: 'pe',
-      headerName: 'P/E',
+      headerName: '',
       minWidth: 90,
       maxWidth: 105,
       valueFormatter: this.decimalFormatter,
@@ -144,14 +144,14 @@ export class App {
     },
     {
       field: 'dividendYield',
-      headerName: 'Dividend',
+      headerName: '',
       minWidth: 110,
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'beta',
-      headerName: 'Beta',
+      headerName: '',
       minWidth: 90,
       maxWidth: 105,
       valueFormatter: this.decimalFormatter,
@@ -159,7 +159,7 @@ export class App {
     },
     {
       field: 'sector',
-      headerName: 'Sector',
+      headerName: '',
       minWidth: 150,
     },
   ];

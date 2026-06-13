@@ -1,4 +1,4 @@
-<main class="workspace">
+<main class="workspace" [class.drawer-open]="drawerVisible()">
   <header class="topbar">
     <div class="brand">
       <span class="brand-mark">P</span>
@@ -141,12 +141,6 @@
         toolPanels: ['columns', 'filters'],
         hiddenByDefault: true
       }"
-      [statusBar]="{
-        statusPanels: [
-          { statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' },
-          { statusPanel: 'agAggregationComponent', align: 'right' }
-        ]
-      }"
       (gridReady)="onGridReady($event)"
     />
   </section>
@@ -160,43 +154,24 @@
   [modal]="false"
   [dismissible]="false"
   [showCloseIcon]="false"
-  [style]="{ width: 'clamp(320px, 31vw, 470px)' }"
+  [style]="{ width: 'var(--drawer-width)' }"
 >
   <ng-template #headless>
     <aside class="drawer-content">
       <div class="drawer-header">
-        <div class="drawer-title">
-          <span class="brand-mark">P</span>
-          <div>
-            <strong>Portfolio structure</strong>
-            <small>Tree, groups and instruments</small>
-          </div>
-        </div>
+        <span class="brand-mark" aria-hidden="true"></span>
         <button type="button" aria-label="Close drawer" (click)="drawerVisible.set(false)">
           <i class="pi pi-times"></i>
         </button>
       </div>
 
       <div class="drawer-summary">
-        <div>
-          <span>Total value</span>
-          <strong>--</strong>
-        </div>
-        <div>
-          <span>Return</span>
-          <strong>--</strong>
-        </div>
-        <div>
-          <span>Positions</span>
-          <strong>--</strong>
-        </div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
 
       <div class="drawer-section-heading">
-        <div>
-          <span>Portfolio tree</span>
-          <small>Select a node to filter the table</small>
-        </div>
         <button type="button" aria-label="Add group">
           <i class="pi pi-plus"></i>
         </button>
@@ -207,25 +182,21 @@
         [value]="treeNodes"
         selectionMode="single"
         [filter]="true"
-        filterPlaceholder="Find group or instrument"
+        filterPlaceholder=""
       >
         <ng-template #empty>
           <div class="tree-empty">
             <span class="empty-icon"><i class="pi pi-sitemap"></i></span>
-            <strong>Tree is empty</strong>
-            <small>Groups and instruments will appear here</small>
           </div>
         </ng-template>
       </p-tree>
 
       <div class="drawer-footer">
-        <button type="button">
+        <button type="button" aria-label="Tree settings">
           <i class="pi pi-cog"></i>
-          Tree settings
         </button>
-        <button class="primary-action" type="button">
+        <button class="primary-action" type="button" aria-label="Add group">
           <i class="pi pi-plus"></i>
-          Add group
         </button>
       </div>
     </aside>
