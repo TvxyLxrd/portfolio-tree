@@ -10,9 +10,7 @@ import {
   themeQuartz,
 } from 'ag-grid-community';
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
-import { TreeNode } from 'primeng/api';
 import { DrawerModule } from 'primeng/drawer';
-import { TreeModule } from 'primeng/tree';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
@@ -38,7 +36,7 @@ interface ColumnOption {
 
 @Component({
   selector: 'app-root',
-  imports: [AgGridAngular, DrawerModule, TreeModule],
+  imports: [AgGridAngular, DrawerModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -46,7 +44,6 @@ export class App {
   protected readonly drawerVisible = signal(false);
   protected readonly columnMenuVisible = signal(false);
   protected readonly activeTreeFilter = signal('');
-  protected readonly treeNodes: TreeNode[] = [];
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: '' },

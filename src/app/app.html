@@ -25,7 +25,7 @@
         class="menu-button"
         type="button"
         aria-label="Open portfolio tree"
-        (click)="drawerVisible.set(true)"
+        (click)="drawerVisible.set(!drawerVisible())"
       >
         <i class="pi pi-bars"></i>
       </button>
@@ -149,47 +149,6 @@
   [style]="{ width: 'var(--drawer-width)' }"
 >
   <ng-template #headless>
-    <aside class="drawer-content">
-      <div class="drawer-header">
-        <button type="button" aria-label="Close drawer" (click)="drawerVisible.set(false)">
-          <i class="pi pi-times"></i>
-        </button>
-      </div>
-
-      <div class="drawer-summary">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-
-      <div class="drawer-section-heading">
-        <button type="button" aria-label="Add group">
-          <i class="pi pi-plus"></i>
-        </button>
-      </div>
-
-      <p-tree
-        styleClass="portfolio-tree"
-        [value]="treeNodes"
-        selectionMode="single"
-        [filter]="true"
-        filterPlaceholder=""
-      >
-        <ng-template #empty>
-          <div class="tree-empty">
-            <span class="empty-icon"><i class="pi pi-sitemap"></i></span>
-          </div>
-        </ng-template>
-      </p-tree>
-
-      <div class="drawer-footer">
-        <button type="button" aria-label="Tree settings">
-          <i class="pi pi-cog"></i>
-        </button>
-        <button class="primary-action" type="button" aria-label="Add group">
-          <i class="pi pi-plus"></i>
-        </button>
-      </div>
-    </aside>
+    <aside class="drawer-content" aria-label="Portfolio drawer"></aside>
   </ng-template>
 </p-drawer>
