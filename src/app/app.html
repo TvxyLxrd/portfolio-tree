@@ -1,0 +1,233 @@
+<main class="workspace">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">P</span>
+      <div>
+        <strong>Portfolio Tree</strong>
+        <small>Investment workspace</small>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-button" type="button" aria-label="Price sync">
+        <i class="pi pi-refresh"></i>
+        <span class="live-dot"></span>
+      </button>
+      <button class="ai-button" type="button" aria-label="AI assistant">
+        AI
+        <i class="pi pi-sparkles"></i>
+      </button>
+      <label class="search-box header-search">
+        <i class="pi pi-search"></i>
+        <input type="search" placeholder="Instrument search" (input)="setQuickFilter($event)" />
+      </label>
+      <button class="avatar-button" type="button" aria-label="User profile">
+        <i class="pi pi-user"></i>
+      </button>
+    </div>
+  </header>
+
+  <section class="toolbar" aria-label="Portfolio controls">
+    <div class="toolbar-group portfolio-controls">
+      <button
+        class="menu-button"
+        type="button"
+        aria-label="Open portfolio tree"
+        (click)="drawerVisible.set(true)"
+      >
+        <i class="pi pi-bars"></i>
+      </button>
+
+      <button class="portfolio-select" type="button" (click)="drawerVisible.set(true)">
+        <span>Portfolio</span>
+        <strong>--</strong>
+        <i class="pi pi-chevron-down"></i>
+      </button>
+
+      <button class="icon-button" type="button" aria-label="Rename portfolio">
+        <i class="pi pi-pencil"></i>
+      </button>
+      <button class="icon-button" type="button" aria-label="Add portfolio">
+        <i class="pi pi-plus"></i>
+      </button>
+    </div>
+
+    <div class="toolbar-group grid-controls">
+      <label class="search-box compact-search">
+        <i class="pi pi-search"></i>
+        <input
+          type="search"
+          placeholder="Add instrument"
+          aria-label="Add instrument"
+          (keydown.enter)="addInstrument($event)"
+        />
+        <i class="pi pi-chevron-down end-icon"></i>
+      </label>
+
+      <button class="control-button" type="button" (click)="openFilterPanel()">
+        <i class="pi pi-filter"></i>
+        <span>Filters</span>
+      </button>
+
+      <div class="column-menu-wrap">
+        <button
+          class="control-button"
+          type="button"
+          [class.active]="columnMenuVisible()"
+          (click)="columnMenuVisible.set(!columnMenuVisible())"
+        >
+          <i class="pi pi-table"></i>
+          <span>Columns</span>
+        </button>
+
+        @if (columnMenuVisible()) {
+          <div class="column-menu">
+            <div class="column-menu-header">
+              <div>
+                <strong>Visible columns</strong>
+                <small>Changes apply instantly</small>
+              </div>
+              <button type="button" aria-label="Close columns menu" (click)="columnMenuVisible.set(false)">
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+
+            @for (option of columnOptions; track option.field) {
+              <label class="column-option">
+                <input type="checkbox" checked (change)="toggleColumn(option, $event)" />
+                <span>{{ option.label }}</span>
+              </label>
+            }
+
+            <button class="reset-columns" type="button" (click)="resetColumns()">
+              Reset columns
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="toolbar-group utility-controls">
+      @if (activeTreeFilter()) {
+        <button class="filter-chip" type="button" (click)="clearFilter()">
+          {{ activeTreeFilter() }}
+          <i class="pi pi-times"></i>
+        </button>
+      }
+      <button class="icon-button" type="button" aria-label="More actions">
+        <i class="pi pi-ellipsis-v"></i>
+      </button>
+      <button class="fullscreen-button" type="button" aria-label="Fullscreen">
+        <i class="pi pi-window-maximize"></i>
+      </button>
+    </div>
+  </section>
+
+  <section class="grid-shell">
+    <ag-grid-angular
+      class="portfolio-grid"
+      [theme]="gridTheme"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [autoGroupColumnDef]="autoGroupColumnDef"
+      [treeData]="true"
+      treeDataChildrenField="children"
+      [groupDefaultExpanded]="2"
+      [suppressGroupRowsSticky]="true"
+      [suppressNoRowsOverlay]="true"
+      [animateRows]="true"
+      [sideBar]="{
+        toolPanels: ['columns', 'filters'],
+        hiddenByDefault: true
+      }"
+      [statusBar]="{
+        statusPanels: [
+          { statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' },
+          { statusPanel: 'agAggregationComponent', align: 'right' }
+        ]
+      }"
+      (gridReady)="onGridReady($event)"
+    />
+  </section>
+</main>
+
+<p-drawer
+  styleClass="portfolio-drawer"
+  position="left"
+  [visible]="drawerVisible()"
+  (visibleChange)="drawerVisible.set($event)"
+  [modal]="false"
+  [dismissible]="false"
+  [showCloseIcon]="false"
+  [style]="{ width: 'clamp(320px, 31vw, 470px)' }"
+>
+  <ng-template #headless>
+    <aside class="drawer-content">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span class="brand-mark">P</span>
+          <div>
+            <strong>Portfolio structure</strong>
+            <small>Tree, groups and instruments</small>
+          </div>
+        </div>
+        <button type="button" aria-label="Close drawer" (click)="drawerVisible.set(false)">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+
+      <div class="drawer-summary">
+        <div>
+          <span>Total value</span>
+          <strong>--</strong>
+        </div>
+        <div>
+          <span>Return</span>
+          <strong>--</strong>
+        </div>
+        <div>
+          <span>Positions</span>
+          <strong>--</strong>
+        </div>
+      </div>
+
+      <div class="drawer-section-heading">
+        <div>
+          <span>Portfolio tree</span>
+          <small>Select a node to filter the table</small>
+        </div>
+        <button type="button" aria-label="Add group">
+          <i class="pi pi-plus"></i>
+        </button>
+      </div>
+
+      <p-tree
+        styleClass="portfolio-tree"
+        [value]="treeNodes"
+        selectionMode="single"
+        [filter]="true"
+        filterPlaceholder="Find group or instrument"
+      >
+        <ng-template #empty>
+          <div class="tree-empty">
+            <span class="empty-icon"><i class="pi pi-sitemap"></i></span>
+            <strong>Tree is empty</strong>
+            <small>Groups and instruments will appear here</small>
+          </div>
+        </ng-template>
+      </p-tree>
+
+      <div class="drawer-footer">
+        <button type="button">
+          <i class="pi pi-cog"></i>
+          Tree settings
+        </button>
+        <button class="primary-action" type="button">
+          <i class="pi pi-plus"></i>
+          Add group
+        </button>
+      </div>
+    </aside>
+  </ng-template>
+</p-drawer>
