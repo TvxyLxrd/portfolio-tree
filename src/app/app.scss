@@ -407,6 +407,130 @@ button {
 }
 
 :host ::ng-deep {
+  .p-button.icon-button,
+  .p-button.menu-button,
+  .p-button.fullscreen-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+    border-radius: 7px;
+    font-size: 15px;
+  }
+
+  .p-button.icon-button,
+  .p-button.menu-button {
+    color: var(--ink);
+  }
+
+  .p-button.fullscreen-button {
+    border-color: var(--blue);
+    color: #fff;
+    background: var(--blue);
+  }
+
+  .p-button.ai-button {
+    height: 38px;
+    padding: 0 10px;
+    border-color: #cfd5df;
+    border-radius: 10px;
+    color: var(--ink);
+    background: #fff;
+  }
+
+  .p-button.ai-button .p-button-icon {
+    color: #845ef7;
+  }
+
+  .p-button.avatar-button {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    padding: 0;
+    border-color: #cfd5df;
+    color: var(--ink);
+    background: #fff;
+  }
+
+  .p-iconfield.header-search {
+    width: 270px;
+    height: 40px;
+  }
+
+  .p-iconfield.header-search .p-inputtext,
+  .p-iconfield.filter-search .p-inputtext {
+    width: 100%;
+    height: 100%;
+    padding-left: 34px;
+    border-color: #cfd5df;
+    border-radius: inherit;
+    font-size: inherit;
+  }
+
+  .p-iconfield.header-search .p-inputtext {
+    border-radius: 10px;
+  }
+
+  .p-iconfield.compact-search,
+  .p-iconfield.filter-search {
+    height: 32px;
+    border-radius: 7px;
+  }
+
+  .p-iconfield.compact-search .p-inputicon,
+  .p-iconfield.filter-search .p-inputicon,
+  .p-iconfield.header-search .p-inputicon {
+    left: 11px;
+    z-index: 2;
+    color: #4f596a;
+  }
+
+  .p-select.portfolio-select {
+    width: 190px;
+    min-width: 190px;
+    height: 32px;
+    min-height: 32px;
+    border-color: #cfd5df;
+    border-radius: 7px;
+    font-size: 12px;
+  }
+
+  .p-select.instrument-select {
+    width: 100%;
+    height: 32px;
+    min-height: 32px;
+    border-color: #cfd5df;
+    border-radius: 7px;
+    font-size: 12px;
+  }
+
+  .p-select.portfolio-select .p-select-label {
+    padding: 0 10px;
+    line-height: 30px;
+  }
+
+  .p-select.instrument-select .p-select-label {
+    height: 30px;
+    padding: 0 30px 0 34px;
+    line-height: 30px;
+  }
+
+  .p-select.portfolio-select .p-select-dropdown,
+  .p-select.instrument-select .p-select-dropdown {
+    width: 28px;
+  }
+
+  .p-button.filter-chip {
+    max-width: 180px;
+    height: 32px;
+    padding: 0 10px;
+    border-color: #d7e1fb;
+    border-radius: 7px;
+    color: #2450b7;
+    background: #f3f6ff;
+    font-size: 12px;
+  }
+
   .portfolio-grid .ag-root-wrapper {
     border: 0;
   }
@@ -540,19 +664,19 @@ button {
     gap: 6px;
   }
 
-  .topbar .icon-button,
-  .topbar .ai-button {
+  p-button.sync-control,
+  p-button.ai-control {
     display: none;
   }
 
-  .header-search {
+  p-iconfield.header-search-control {
     flex: 1;
     width: auto;
     height: 38px;
     min-width: 0;
   }
 
-  .avatar-button {
+  p-button.avatar-control {
     width: 38px;
     height: 38px;
     flex: 0 0 38px;
@@ -578,11 +702,11 @@ button {
     flex: 0 0 36px;
   }
 
-  .portfolio-controls > .icon-button {
+  p-button.toolbar-icon-control {
     display: none;
   }
 
-  .portfolio-select {
+  p-select.portfolio-select-control {
     flex: 1;
     width: auto;
     min-width: 0;
@@ -599,7 +723,7 @@ button {
     gap: 6px;
   }
 
-  .compact-search {
+  p-iconfield.compact-search-control {
     flex: 1;
     width: auto;
     min-width: 0;
@@ -607,7 +731,7 @@ button {
     padding: 0 11px;
   }
 
-  .filter-search {
+  p-iconfield.filter-search-control {
     width: min(150px, 40vw);
     height: 40px;
     flex: 0 1 150px;
@@ -628,11 +752,11 @@ button {
     gap: 4px;
   }
 
-  .utility-controls .icon-button {
+  p-button.more-control {
     display: none;
   }
 
-  .fullscreen-button {
+  p-button.fullscreen-control {
     width: 38px;
     height: 38px;
     font-size: 17px;
@@ -667,6 +791,39 @@ button {
   }
 
   :host ::ng-deep {
+    .p-iconfield.header-search {
+      width: 100%;
+      height: 38px;
+    }
+
+    .p-select.portfolio-select {
+      width: 100%;
+      min-width: 0;
+      height: 38px;
+    }
+
+    .p-select.portfolio-select .p-select-label {
+      line-height: 36px;
+    }
+
+    .p-iconfield.compact-search,
+    .p-iconfield.filter-search,
+    .p-select.instrument-select {
+      height: 40px;
+    }
+
+    .p-select.instrument-select .p-select-label {
+      height: 38px;
+      line-height: 38px;
+    }
+
+    .p-button.menu-button,
+    .p-button.fullscreen-button {
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+    }
+
     .portfolio-grid .ag-root-wrapper,
     .portfolio-grid .ag-root,
     .portfolio-grid .ag-body {

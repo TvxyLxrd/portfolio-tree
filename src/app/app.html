@@ -1,80 +1,128 @@
 <main class="workspace" [class.drawer-open]="drawerVisible()">
   <header class="topbar">
     <div class="header-actions">
-      <button class="icon-button" type="button" aria-label="Price sync">
-        <i class="pi pi-refresh"></i>
-        <span class="live-dot"></span>
-      </button>
-      <button class="ai-button" type="button" aria-label="AI assistant">
-        AI
-        <i class="pi pi-sparkles"></i>
-      </button>
-      <label class="search-box header-search">
-        <i class="pi pi-search"></i>
-        <input type="search" placeholder="Instrument search" (input)="setQuickFilter($event)" />
-      </label>
-      <button class="avatar-button" type="button" aria-label="User profile">
-        <i class="pi pi-user"></i>
-      </button>
+      <p-button
+        class="sync-control"
+        styleClass="icon-button sync-button"
+        icon="pi pi-refresh"
+        [text]="true"
+        ariaLabel="Price sync"
+      />
+      <p-button
+        class="ai-control"
+        styleClass="ai-button"
+        label="AI"
+        icon="pi pi-sparkles"
+        iconPos="right"
+        [outlined]="true"
+        ariaLabel="AI assistant"
+      />
+      <p-iconfield class="header-search-control" styleClass="header-search">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          pInputText
+          type="search"
+          placeholder="Instrument search"
+          aria-label="Instrument search"
+          (input)="setQuickFilter($event)"
+        />
+      </p-iconfield>
+      <p-button
+        class="avatar-control"
+        styleClass="avatar-button"
+        icon="pi pi-user"
+        [rounded]="true"
+        [outlined]="true"
+        ariaLabel="User profile"
+      />
     </div>
   </header>
 
   <section class="toolbar" aria-label="Portfolio controls">
     <div class="toolbar-group portfolio-controls">
-      <button
-        class="menu-button"
-        type="button"
-        aria-label="Open portfolio tree"
-        (click)="drawerVisible.set(!drawerVisible())"
-      >
-        <i class="pi pi-bars"></i>
-      </button>
+      <p-button
+        class="menu-control"
+        styleClass="menu-button"
+        icon="pi pi-bars"
+        [text]="true"
+        ariaLabel="Open portfolio tree"
+        (onClick)="drawerVisible.set(!drawerVisible())"
+      />
 
-      <button class="portfolio-select" type="button" (click)="drawerVisible.set(true)">
-        <span>Portfolio</span>
-        <strong>--</strong>
-        <i class="pi pi-chevron-down"></i>
-      </button>
+      <p-select
+        class="portfolio-select-control"
+        styleClass="portfolio-select"
+        [options]="portfolioOptions"
+        [(ngModel)]="selectedPortfolio"
+        ariaLabel="Portfolio"
+      />
 
-      <button class="icon-button" type="button" aria-label="Rename portfolio">
-        <i class="pi pi-pencil"></i>
-      </button>
-      <button class="icon-button" type="button" aria-label="Add portfolio">
-        <i class="pi pi-plus"></i>
-      </button>
+      <p-button
+        class="toolbar-icon-control"
+        styleClass="icon-button"
+        icon="pi pi-pencil"
+        [text]="true"
+        ariaLabel="Rename portfolio"
+      />
+      <p-button
+        class="toolbar-icon-control"
+        styleClass="icon-button"
+        icon="pi pi-plus"
+        [text]="true"
+        ariaLabel="Add portfolio"
+      />
     </div>
 
     <div class="toolbar-group grid-controls">
-      <label class="search-box compact-search">
-        <i class="pi pi-search"></i>
-        <input
-          type="search"
+      <p-iconfield class="compact-search-control" styleClass="compact-search">
+        <p-inputicon styleClass="pi pi-search" />
+        <p-select
+          styleClass="instrument-select"
+          [options]="instrumentOptions"
+          [(ngModel)]="instrumentQuery"
+          [editable]="true"
           placeholder="Add instrument"
-          aria-label="Add instrument"
-          (keydown.enter)="addInstrument($event)"
+          ariaLabel="Add instrument"
         />
-        <i class="pi pi-chevron-down end-icon"></i>
-      </label>
+      </p-iconfield>
 
-      <label class="search-box filter-search">
-        <i class="pi pi-search"></i>
-        <input type="search" placeholder="Filter" aria-label="Filter" (input)="setQuickFilter($event)" />
-      </label>
+      <p-iconfield class="filter-search-control" styleClass="filter-search">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          pInputText
+          type="search"
+          placeholder="Filter"
+          aria-label="Filter"
+          (input)="setQuickFilter($event)"
+        />
+      </p-iconfield>
     </div>
 
     <div class="toolbar-group utility-controls">
       @if (activeTreeFilter()) {
-        <button class="filter-chip" type="button" (click)="clearFilter()">
-          {{ activeTreeFilter() }}
-          <i class="pi pi-times"></i>
-        </button>
+        <p-button
+          class="filter-chip-control"
+          styleClass="filter-chip"
+          [label]="activeTreeFilter()"
+          icon="pi pi-times"
+          iconPos="right"
+          [outlined]="true"
+          (onClick)="clearFilter()"
+        />
       }
-      <button class="icon-button" type="button" aria-label="More actions">
-        <i class="pi pi-ellipsis-v"></i>
-      </button>
-      <button class="fullscreen-button" type="button" aria-label="Fullscreen">
-        <i class="pi pi-window-maximize"></i>
-      </button>
+      <p-button
+        class="more-control"
+        styleClass="icon-button"
+        icon="pi pi-ellipsis-v"
+        [text]="true"
+        ariaLabel="More actions"
+      />
+      <p-button
+        class="fullscreen-control"
+        styleClass="fullscreen-button"
+        icon="pi pi-window-maximize"
+        ariaLabel="Fullscreen"
+      />
     </div>
   </section>
 

@@ -1,4 +1,5 @@
 import { Component, HostListener, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   CellClassParams,
@@ -10,7 +11,12 @@ import {
   themeQuartz,
 } from 'ag-grid-community';
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
+import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
@@ -36,13 +42,26 @@ interface ColumnOption {
 
 @Component({
   selector: 'app-root',
-  imports: [AgGridAngular, DrawerModule],
+  imports: [
+    FormsModule,
+    AgGridAngular,
+    ButtonModule,
+    DrawerModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    SelectModule,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
   protected readonly drawerVisible = signal(false);
   protected readonly activeTreeFilter = signal('');
+  protected readonly portfolioOptions = ['Portfolio  --'];
+  protected readonly instrumentOptions: string[] = [];
+  protected selectedPortfolio = 'Portfolio  --';
+  protected instrumentQuery: string | null = null;
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: '' },
@@ -167,18 +186,6 @@ export class App {
   protected clearFilter(): void {
     this.activeTreeFilter.set('');
     this.gridApi?.setGridOption('quickFilterText', '');
-  }
-
-  protected addInstrument(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value.trim();
-    if (!value) {
-      return;
-    }
-
-    this.activeTreeFilter.set(value);
-    this.gridApi?.setGridOption('quickFilterText', value);
-    input.value = '';
   }
 
   private applyResponsiveGrid(): void {
