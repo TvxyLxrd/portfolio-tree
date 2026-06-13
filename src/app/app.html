@@ -1,13 +1,5 @@
 <main class="workspace" [class.drawer-open]="drawerVisible()">
   <header class="topbar">
-    <div class="brand">
-      <span class="brand-mark">P</span>
-      <div>
-        <strong>Portfolio Tree</strong>
-        <small>Investment workspace</small>
-      </div>
-    </div>
-
     <div class="header-actions">
       <button class="icon-button" type="button" aria-label="Price sync">
         <i class="pi pi-refresh"></i>
@@ -159,7 +151,6 @@
   <ng-template #headless>
     <aside class="drawer-content">
       <div class="drawer-header">
-        <span class="brand-mark" aria-hidden="true"></span>
         <button type="button" aria-label="Close drawer" (click)="drawerVisible.set(false)">
           <i class="pi pi-times"></i>
         </button>

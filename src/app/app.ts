@@ -65,9 +65,11 @@ export class App {
   private gridApi?: GridApi<PortfolioRow>;
 
   protected readonly defaultColDef: ColDef<PortfolioRow> = {
-    sortable: true,
-    filter: true,
+    sortable: false,
+    filter: false,
     resizable: true,
+    suppressHeaderMenuButton: true,
+    suppressHeaderFilterButton: true,
     minWidth: 110,
     flex: 1,
   };
@@ -110,7 +112,6 @@ export class App {
       valueFormatter: this.percentFormatter,
       cellClassRules: this.changeClassRules,
       type: 'numericColumn',
-      sort: 'desc',
     },
     {
       field: 'weight',
