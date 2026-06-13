@@ -56,47 +56,10 @@
         <i class="pi pi-chevron-down end-icon"></i>
       </label>
 
-      <button class="control-button" type="button" (click)="openFilterPanel()">
-        <i class="pi pi-filter"></i>
-        <span>Filters</span>
-      </button>
-
-      <div class="column-menu-wrap">
-        <button
-          class="control-button"
-          type="button"
-          [class.active]="columnMenuVisible()"
-          (click)="columnMenuVisible.set(!columnMenuVisible())"
-        >
-          <i class="pi pi-table"></i>
-          <span>Columns</span>
-        </button>
-
-        @if (columnMenuVisible()) {
-          <div class="column-menu">
-            <div class="column-menu-header">
-              <div>
-                <strong>Visible columns</strong>
-                <small>Changes apply instantly</small>
-              </div>
-              <button type="button" aria-label="Close columns menu" (click)="columnMenuVisible.set(false)">
-                <i class="pi pi-times"></i>
-              </button>
-            </div>
-
-            @for (option of columnOptions; track option.field) {
-              <label class="column-option">
-                <input type="checkbox" checked (change)="toggleColumn(option, $event)" />
-                <span>{{ option.label }}</span>
-              </label>
-            }
-
-            <button class="reset-columns" type="button" (click)="resetColumns()">
-              Reset columns
-            </button>
-          </div>
-        }
-      </div>
+      <label class="search-box filter-search">
+        <i class="pi pi-search"></i>
+        <input type="search" placeholder="Filter" aria-label="Filter" (input)="setQuickFilter($event)" />
+      </label>
     </div>
 
     <div class="toolbar-group utility-controls">

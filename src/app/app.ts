@@ -42,7 +42,6 @@ interface ColumnOption {
 })
 export class App {
   protected readonly drawerVisible = signal(false);
-  protected readonly columnMenuVisible = signal(false);
   protected readonly activeTreeFilter = signal('');
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
@@ -170,10 +169,6 @@ export class App {
     this.gridApi?.setGridOption('quickFilterText', '');
   }
 
-  protected openFilterPanel(): void {
-    this.gridApi?.openToolPanel('filters');
-  }
-
   protected addInstrument(event: Event): void {
     const input = event.target as HTMLInputElement;
     const value = input.value.trim();
@@ -184,16 +179,6 @@ export class App {
     this.activeTreeFilter.set(value);
     this.gridApi?.setGridOption('quickFilterText', value);
     input.value = '';
-  }
-
-  protected toggleColumn(option: ColumnOption, event: Event): void {
-    const visible = (event.target as HTMLInputElement).checked;
-    this.gridApi?.setColumnsVisible([String(option.field)], visible);
-  }
-
-  protected resetColumns(): void {
-    this.gridApi?.resetColumnState();
-    this.columnMenuVisible.set(false);
   }
 
   private applyResponsiveGrid(): void {

@@ -193,7 +193,19 @@ button {
 }
 
 .compact-search {
-  width: min(300px, 28vw);
+  width: 190px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 7px;
+  font-size: 12px;
+}
+
+.filter-search {
+  width: 150px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 7px;
+  font-size: 12px;
 }
 
 .end-icon {
@@ -573,6 +585,12 @@ button {
     min-width: 0;
     height: 40px;
     padding: 0 11px;
+  }
+
+  .filter-search {
+    width: min(150px, 40vw);
+    height: 40px;
+    flex: 0 1 150px;
   }
 
   .control-button {
