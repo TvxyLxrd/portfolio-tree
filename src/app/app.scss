@@ -101,6 +101,12 @@ button {
   gap: 10px;
 }
 
+p-autocomplete.instrument-autocomplete-control,
+p-iconfield.filter-search-control {
+  width: 190px;
+  flex: 0 0 190px;
+}
+
 .utility-controls {
   justify-content: flex-end;
   gap: 8px;
