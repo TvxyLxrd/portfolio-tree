@@ -13,14 +13,14 @@ import {
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
 import { DrawerModule } from 'primeng/drawer';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { ListboxModule } from 'primeng/listbox';
 import { MenuModule } from 'primeng/menu';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { PopoverModule } from 'primeng/popover';
-import { ScrollerLazyLoadEvent, ScrollerModule } from 'primeng/scroller';
 import { SelectModule } from 'primeng/select';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
@@ -64,16 +64,10 @@ interface Stock {
   name: string;
 }
 
-type InstrumentSelectionRule =
-  | {
-      type: 'exchange';
-      exchangeId: string;
-      excludedStockIds: string[];
-    }
-  | {
-      type: 'stock';
-      stockId: string;
-    };
+type InstrumentSelectionRule = {
+  type: 'stock';
+  stockId: string;
+};
 
 type InstrumentSelectorStep = 'country' | 'exchange' | 'stock';
 
@@ -83,14 +77,14 @@ type InstrumentSelectorStep = 'country' | 'exchange' | 'stock';
     FormsModule,
     AgGridAngular,
     ButtonModule,
-    CheckboxModule,
     DrawerModule,
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    ListboxModule,
     MenuModule,
+    MultiSelectModule,
     PopoverModule,
-    ScrollerModule,
     SelectModule,
   ],
   templateUrl: './app.html',
@@ -110,12 +104,10 @@ export class App {
   protected countries: Country[] = [];
   protected exchanges: Exchange[] = [];
   protected stocks: Stock[] = [];
-  protected selectedExchangeIds = new Set<string>();
-  protected selectedStockIds = new Set<string>();
-  protected excludedStockIds = new Set<string>();
+  protected selectedStockIds: string[] = [];
   protected selectedCountryId?: string;
   protected selectedExchangeId?: string;
-  protected stockSearch = '';
+  protected readonly selectorListStyle = { 'max-height': '13.5rem' };
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: 'Ticker' },
@@ -132,8 +124,6 @@ export class App {
   protected readonly gridTheme = themeQuartz;
 
   private gridApi?: GridApi<PortfolioRow>;
-  private readonly stockExchangeLookup = new Map<string, string>();
-
   constructor() {
     this.loadCountries();
   }
@@ -247,28 +237,41 @@ export class App {
     this.gridApi?.setGridOption('quickFilterText', '');
   }
 
+  protected onCountryChange(countryId: string | null): void {
+    const country = this.countries.find((item) => item.id === countryId);
+
+    if (country) {
+      this.selectCountry(country);
+    }
+  }
+
   protected selectCountry(country: Country): void {
     this.selectedCountryId = country.id;
     this.selectedExchangeId = undefined;
     this.instrumentSelectorStep = 'exchange';
-    this.stockSearch = '';
     this.stocks = [];
     this.loadExchanges(country.id);
+  }
+
+  protected onExchangeChange(exchangeId: string | null): void {
+    const exchange = this.exchangesForSelectedCountry.find((item) => item.id === exchangeId);
+
+    if (exchange) {
+      this.selectExchange(exchange);
+    }
   }
 
   protected selectExchange(exchange: Exchange): void {
     this.selectedExchangeId = exchange.id;
     this.instrumentSelectorStep = 'stock';
-    this.stockSearch = '';
     this.stocks = [];
-    this.loadStocks({ first: 0, rows: 50 });
+    this.loadStocks();
   }
 
   protected goToPreviousInstrumentStep(): void {
     if (this.instrumentSelectorStep === 'stock') {
       this.instrumentSelectorStep = 'exchange';
       this.selectedExchangeId = undefined;
-      this.stockSearch = '';
       this.stocks = [];
       return;
     }
@@ -278,149 +281,68 @@ export class App {
       this.selectedCountryId = undefined;
       this.selectedExchangeId = undefined;
       this.exchanges = [];
-      this.stockSearch = '';
       this.stocks = [];
     }
   }
 
-  protected toggleExchange(exchange: Exchange, checked: boolean): void {
-    if (checked) {
-      this.selectedExchangeIds.add(exchange.id);
-    } else {
-      this.selectedExchangeIds.delete(exchange.id);
-      for (const [stockId, exchangeId] of this.stockExchangeLookup) {
-        if (exchangeId === exchange.id) {
-          this.excludedStockIds.delete(stockId);
-        }
-      }
-    }
-  }
-
-  protected toggleStock(stock: Stock, checked: boolean): void {
-    this.stockExchangeLookup.set(stock.id, stock.exchangeId);
-    const exchangeSelected = this.selectedExchangeIds.has(stock.exchangeId);
-
-    if (exchangeSelected) {
-      if (checked) {
-        this.excludedStockIds.delete(stock.id);
-      } else {
-        this.excludedStockIds.add(stock.id);
-      }
-
-      return;
-    }
-
-    if (checked) {
-      this.selectedStockIds.add(stock.id);
-    } else {
-      this.selectedStockIds.delete(stock.id);
-    }
-  }
-
-  protected isExchangeSelected(exchangeId: string): boolean {
-    return this.selectedExchangeIds.has(exchangeId);
-  }
-
-  protected isStockSelected(stock: Stock): boolean {
-    if (this.selectedExchangeIds.has(stock.exchangeId)) {
-      return !this.excludedStockIds.has(stock.id);
-    }
-
-    return this.selectedStockIds.has(stock.id);
-  }
-
-  protected onStockSearchChange(query: string): void {
-    this.stockSearch = query;
-    this.loadStocks({ first: 0, rows: 50 });
-  }
-
-  protected loadStocks(event: ScrollerLazyLoadEvent | { first: number; rows: number }): void {
-    void event;
+  protected loadStocks(): void {
     const stocksByExchange: Record<string, Stock[]> = {
       nyse: [
-        { id: 'ko', exchangeId: 'nyse', ticker: 'KO', name: 'Coca-Cola Co' },
-        { id: 'jpm', exchangeId: 'nyse', ticker: 'JPM', name: 'JPMorgan Chase & Co' },
-        { id: 'dis', exchangeId: 'nyse', ticker: 'DIS', name: 'Walt Disney Co' },
+        { id: 'lly', exchangeId: 'nyse', ticker: 'LLY', name: 'Eli Lilly' },
+        { id: 'xom', exchangeId: 'nyse', ticker: 'XOM', name: 'Exxon Mobil' },
+        { id: 'v', exchangeId: 'nyse', ticker: 'V', name: 'Visa' },
       ],
       nasdaq: [
-        { id: 'aapl', exchangeId: 'nasdaq', ticker: 'AAPL', name: 'Apple Inc' },
-        { id: 'msft', exchangeId: 'nasdaq', ticker: 'MSFT', name: 'Microsoft Corp' },
-        { id: 'nvda', exchangeId: 'nasdaq', ticker: 'NVDA', name: 'NVIDIA Corp' },
+        { id: 'aapl', exchangeId: 'nasdaq', ticker: 'AAPL', name: 'Apple' },
+        { id: 'msft', exchangeId: 'nasdaq', ticker: 'MSFT', name: 'Microsoft' },
+        { id: 'nvda', exchangeId: 'nasdaq', ticker: 'NVDA', name: 'NVIDIA' },
       ],
-      cboe: [
-        { id: 'spy', exchangeId: 'cboe', ticker: 'SPY', name: 'SPDR S&P 500 ETF Trust' },
-        { id: 'qqq', exchangeId: 'cboe', ticker: 'QQQ', name: 'Invesco QQQ Trust' },
-        { id: 'iwm', exchangeId: 'cboe', ticker: 'IWM', name: 'iShares Russell 2000 ETF' },
+      otc: [
+        { id: 'tcehy', exchangeId: 'otc', ticker: 'TCEHY', name: 'Tencent Holdings' },
+        { id: 'rhhby', exchangeId: 'otc', ticker: 'RHHBY', name: 'Roche Holding' },
+        { id: 'ntdoy', exchangeId: 'otc', ticker: 'NTDOY', name: 'Nintendo OTC' },
       ],
-      xetra: [
-        { id: 'sap', exchangeId: 'xetra', ticker: 'SAP', name: 'SAP SE' },
-        { id: 'sie', exchangeId: 'xetra', ticker: 'SIE', name: 'Siemens AG' },
-        { id: 'alv', exchangeId: 'xetra', ticker: 'ALV', name: 'Allianz SE' },
+      sse: [
+        { id: '600519', exchangeId: 'sse', ticker: '600519', name: 'Kweichow Moutai' },
+        { id: '601166', exchangeId: 'sse', ticker: '601166', name: 'Industrial Bank' },
+        { id: '600036', exchangeId: 'sse', ticker: '600036', name: 'China Merchants Bank' },
       ],
-      frankfurt: [
-        { id: 'bmw', exchangeId: 'frankfurt', ticker: 'BMW', name: 'Bayerische Motoren Werke AG' },
-        { id: 'bas', exchangeId: 'frankfurt', ticker: 'BAS', name: 'BASF SE' },
-        { id: 'dte', exchangeId: 'frankfurt', ticker: 'DTE', name: 'Deutsche Telekom AG' },
+      szse: [
+        { id: '002594', exchangeId: 'szse', ticker: '002594', name: 'BYD' },
+        { id: '300750', exchangeId: 'szse', ticker: '300750', name: 'CATL' },
+        { id: '000333', exchangeId: 'szse', ticker: '000333', name: 'Midea Group' },
       ],
-      stuttgart: [
-        { id: 'vow3', exchangeId: 'stuttgart', ticker: 'VOW3', name: 'Volkswagen AG' },
-        { id: 'dbk', exchangeId: 'stuttgart', ticker: 'DBK', name: 'Deutsche Bank AG' },
-        { id: 'ifx', exchangeId: 'stuttgart', ticker: 'IFX', name: 'Infineon Technologies AG' },
+      hkex: [
+        { id: '0700', exchangeId: 'hkex', ticker: '0700', name: 'Tencent' },
+        { id: '9988', exchangeId: 'hkex', ticker: '9988', name: 'Alibaba' },
+        { id: '0005', exchangeId: 'hkex', ticker: '0005', name: 'HSBC' },
       ],
-      tase: [
-        { id: '7203', exchangeId: 'tase', ticker: '7203', name: 'Toyota Motor Corp' },
-        { id: '6758', exchangeId: 'tase', ticker: '6758', name: 'Sony Group Corp' },
-        { id: '9984', exchangeId: 'tase', ticker: '9984', name: 'SoftBank Group Corp' },
+      tse: [
+        { id: '7203', exchangeId: 'tse', ticker: '7203', name: 'Toyota Motor' },
+        { id: '6758', exchangeId: 'tse', ticker: '6758', name: 'Sony Group' },
+        { id: '9984', exchangeId: 'tse', ticker: '9984', name: 'SoftBank Group' },
       ],
-      osaka: [
-        { id: '6861', exchangeId: 'osaka', ticker: '6861', name: 'Keyence Corp' },
-        { id: '7974', exchangeId: 'osaka', ticker: '7974', name: 'Nintendo Co Ltd' },
-        { id: '9983', exchangeId: 'osaka', ticker: '9983', name: 'Fast Retailing Co Ltd' },
+      ose: [
+        { id: '6861', exchangeId: 'ose', ticker: '6861', name: 'Keyence' },
+        { id: '7974', exchangeId: 'ose', ticker: '7974', name: 'Nintendo' },
+        { id: '9983', exchangeId: 'ose', ticker: '9983', name: 'Fast Retailing' },
       ],
-      nagoya: [
-        { id: '7267', exchangeId: 'nagoya', ticker: '7267', name: 'Honda Motor Co Ltd' },
-        { id: '6501', exchangeId: 'nagoya', ticker: '6501', name: 'Hitachi Ltd' },
-        { id: '9432', exchangeId: 'nagoya', ticker: '9432', name: 'Nippon Telegraph and Telephone Corp' },
+      'nse-jp': [
+        { id: '7267', exchangeId: 'nse-jp', ticker: '7267', name: 'Honda Motor' },
+        { id: '6501', exchangeId: 'nse-jp', ticker: '6501', name: 'Hitachi' },
+        { id: '9432', exchangeId: 'nse-jp', ticker: '9432', name: 'NTT' },
       ],
     };
 
-    const query = this.stockSearch.trim().toLocaleLowerCase();
-    const exchangeStocks = this.selectedExchangeId
-      ? stocksByExchange[this.selectedExchangeId] ?? []
-      : [];
-
-    this.stocks = query
-      ? exchangeStocks.filter(
-          (stock) =>
-            stock.ticker.toLocaleLowerCase().includes(query) ||
-            stock.name.toLocaleLowerCase().includes(query),
-        )
-      : exchangeStocks;
-    this.stocks.forEach((stock) => this.stockExchangeLookup.set(stock.id, stock.exchangeId));
-
+    this.stocks = this.selectedExchangeId ? stocksByExchange[this.selectedExchangeId] ?? [] : [];
     // TODO: call API to load stocks by exchangeId, search, offset and limit.
-    // Remember to fill stockExchangeLookup for each loaded stock.
   }
 
   protected buildSelectionRules(): InstrumentSelectionRule[] {
-    const exchangeRules: InstrumentSelectionRule[] = Array.from(this.selectedExchangeIds).map(
-      (exchangeId) => ({
-        type: 'exchange',
-        exchangeId,
-        excludedStockIds: Array.from(this.excludedStockIds).filter(
-          (stockId) => this.stockExchangeLookup.get(stockId) === exchangeId,
-        ),
-      }),
-    );
-
-    const stockRules: InstrumentSelectionRule[] = Array.from(this.selectedStockIds).map(
-      (stockId) => ({
-        type: 'stock',
-        stockId,
-      }),
-    );
-
-    return [...exchangeRules, ...stockRules];
+    return Array.from(new Set(this.selectedStockIds)).map((stockId) => ({
+      type: 'stock',
+      stockId,
+    }));
   }
 
   protected get exchangesForSelectedCountry(): Exchange[] {
@@ -441,36 +363,21 @@ export class App {
 
   protected get instrumentSelectorTitle(): string {
     if (this.instrumentSelectorStep === 'exchange') {
-      return 'Choose exchange';
+      return this.selectedCountryName ?? 'Stocks';
     }
 
     if (this.instrumentSelectorStep === 'stock') {
-      return 'Choose token';
+      return `Search ${this.selectedExchangeCode ?? this.selectedExchangeName ?? 'exchange'}`;
     }
 
-    return 'Choose country';
-  }
-
-  protected get instrumentSelectorSubtitle(): string {
-    const countryName = this.selectedCountryName;
-    const exchangeName = this.selectedExchangeName;
-
-    if (this.instrumentSelectorStep === 'exchange') {
-      return countryName ?? 'Select a country first';
-    }
-
-    if (this.instrumentSelectorStep === 'stock') {
-      return [countryName, exchangeName].filter(Boolean).join(' / ') || 'Select an exchange first';
-    }
-
-    return 'Start with a country';
+    return 'Search for instrument';
   }
 
   private loadCountries(): void {
     this.countries = [
-      { id: 'us', name: 'United States' },
-      { id: 'de', name: 'Germany' },
-      { id: 'jp', name: 'Japan' },
+      { id: 'us', name: 'Stocks USA' },
+      { id: 'cn', name: 'Stocks China' },
+      { id: 'jp', name: 'Stocks Japan' },
     ];
 
     // TODO: call API to load countries.
@@ -479,19 +386,19 @@ export class App {
   private loadExchanges(countryId: string): void {
     const exchangesByCountry: Record<string, Exchange[]> = {
       us: [
-        { id: 'nyse', countryId: 'us', name: 'New York Stock Exchange', code: 'NYSE' },
-        { id: 'nasdaq', countryId: 'us', name: 'Nasdaq Stock Market', code: 'NASDAQ' },
-        { id: 'cboe', countryId: 'us', name: 'Cboe Global Markets', code: 'CBOE' },
+        { id: 'nyse', countryId: 'us', name: 'NYSE', code: 'NYSE' },
+        { id: 'nasdaq', countryId: 'us', name: 'Nasdaq', code: 'NASDAQ' },
+        { id: 'otc', countryId: 'us', name: 'OTC Market', code: 'OTC' },
       ],
-      de: [
-        { id: 'xetra', countryId: 'de', name: 'Xetra', code: 'XETR' },
-        { id: 'frankfurt', countryId: 'de', name: 'Frankfurt Stock Exchange', code: 'XFRA' },
-        { id: 'stuttgart', countryId: 'de', name: 'Stuttgart Stock Exchange', code: 'XSTU' },
+      cn: [
+        { id: 'sse', countryId: 'cn', name: 'Shanghai', code: 'SSE' },
+        { id: 'szse', countryId: 'cn', name: 'Shenzhen', code: 'SZSE' },
+        { id: 'hkex', countryId: 'cn', name: 'Hong Kong', code: 'HKEX' },
       ],
       jp: [
-        { id: 'tase', countryId: 'jp', name: 'Tokyo Stock Exchange', code: 'TSE' },
-        { id: 'osaka', countryId: 'jp', name: 'Osaka Exchange', code: 'OSE' },
-        { id: 'nagoya', countryId: 'jp', name: 'Nagoya Stock Exchange', code: 'NSE' },
+        { id: 'tse', countryId: 'jp', name: 'Tokyo', code: 'TSE' },
+        { id: 'ose', countryId: 'jp', name: 'Osaka', code: 'OSE' },
+        { id: 'nse-jp', countryId: 'jp', name: 'Nagoya', code: 'NSE' },
       ],
     };
 
@@ -506,6 +413,10 @@ export class App {
 
   private get selectedExchangeName(): string | undefined {
     return this.exchanges.find((exchange) => exchange.id === this.selectedExchangeId)?.name;
+  }
+
+  private get selectedExchangeCode(): string | undefined {
+    return this.exchanges.find((exchange) => exchange.id === this.selectedExchangeId)?.code;
   }
 
   private applyResponsiveGrid(): void {

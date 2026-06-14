@@ -99,109 +99,83 @@
             }
             <div class="instrument-selector-step-title">
               <strong>{{ instrumentSelectorTitle }}</strong>
-              <span>{{ instrumentSelectorSubtitle }}</span>
             </div>
+            <p-button
+              icon="pi pi-times"
+              [text]="true"
+              severity="secondary"
+              ariaLabel="Close instrument selector"
+              (onClick)="instrumentSelector.hide()"
+            />
           </div>
 
           <div class="instrument-selector-section">
             @switch (instrumentSelectorStep) {
               @case ('country') {
                 <section class="selector-column selector-column-single">
-                  <header>Countries</header>
-                  <div class="selector-list">
-                    @for (country of countries; track country.id) {
-                      <button
-                        class="selector-list-row"
-                        type="button"
-                        [class.is-active]="country.id === selectedCountryId"
-                        (click)="selectCountry(country)"
-                      >
-                        <span class="selector-list-row-main">
-                          <strong>{{ country.name }}</strong>
-                        </span>
+                  <p-listbox
+                    [options]="countries"
+                    [(ngModel)]="selectedCountryId"
+                    optionLabel="name"
+                    optionValue="id"
+                    dataKey="id"
+                    [listStyle]="selectorListStyle"
+                    [checkmark]="false"
+                    emptyMessage="Countries will load here."
+                    styleClass="selector-listbox"
+                    (onChange)="onCountryChange($event.value)"
+                  >
+                    <ng-template #item let-country>
+                      <div class="selector-listbox-row">
+                        <span>{{ country.name }}</span>
                         <i class="pi pi-chevron-right" aria-hidden="true"></i>
-                      </button>
-                    } @empty {
-                      <div class="selector-empty-state">Countries will load here.</div>
-                    }
-                  </div>
+                      </div>
+                    </ng-template>
+                  </p-listbox>
                 </section>
               }
 
               @case ('exchange') {
                 <section class="selector-column selector-column-single">
-                  <header>Exchanges</header>
-                  <div class="selector-list">
-                    @for (exchange of exchangesForSelectedCountry; track exchange.id) {
-                      <button
-                        class="selector-list-row"
-                        type="button"
-                        [class.is-active]="exchange.id === selectedExchangeId"
-                        (click)="selectExchange(exchange)"
-                      >
-                        <span class="selector-list-row-main">
-                          <strong>{{ exchange.name }}</strong>
-                          @if (exchange.code) {
-                            <small>{{ exchange.code }}</small>
-                          }
-                        </span>
+                  <p-listbox
+                    [options]="exchangesForSelectedCountry"
+                    [(ngModel)]="selectedExchangeId"
+                    optionLabel="name"
+                    optionValue="id"
+                    dataKey="id"
+                    [listStyle]="selectorListStyle"
+                    [checkmark]="false"
+                    emptyMessage="Exchanges will load here."
+                    styleClass="selector-listbox"
+                    (onChange)="onExchangeChange($event.value)"
+                  >
+                    <ng-template #item let-exchange>
+                      <div class="selector-listbox-row">
+                        <span>{{ exchange.name }}</span>
                         <i class="pi pi-chevron-right" aria-hidden="true"></i>
-                      </button>
-                    } @empty {
-                      <div class="selector-empty-state">
-                        Exchanges will load here.
                       </div>
-                    }
-                  </div>
+                    </ng-template>
+                  </p-listbox>
                 </section>
               }
 
               @case ('stock') {
                 <section class="selector-column selector-column-single selector-column-stocks">
-                  <header>Stocks</header>
-                  <div class="selector-search-shell">
-                    <p-iconfield class="selector-search-field">
-                      <p-inputicon class="pi pi-search" />
-                      <input
-                        pInputText
-                        type="search"
-                        placeholder="Search stocks"
-                        [ngModel]="stockSearch"
-                        (ngModelChange)="onStockSearchChange($event)"
-                      />
-                    </p-iconfield>
-                  </div>
-
                   @if (selectedExchangeId) {
-                    <p-scroller
-                      [items]="stocksForSelectedExchange"
-                      [itemSize]="44"
-                      scrollHeight="260px"
-                      [lazy]="true"
-                      [showLoader]="false"
-                      (onLazyLoad)="loadStocks($event)"
-                    >
-                      <ng-template #item let-stock>
-                        <div class="stock-selector-row">
-                          <p-checkbox
-                            [binary]="true"
-                            [ngModel]="isStockSelected(stock)"
-                            [inputId]="'stock-' + stock.id"
-                            (onChange)="toggleStock(stock, $event.checked === true)"
-                          />
-                          <label [for]="'stock-' + stock.id">
-                            <strong>{{ stock.ticker }}</strong>
-                            <span>{{ stock.name }}</span>
-                          </label>
-                        </div>
-                      </ng-template>
-                    </p-scroller>
-
-                    @if (!stocksForSelectedExchange.length) {
-                      <div class="selector-empty-state selector-empty-state-overlay">
-                        Stocks will load here.
-                      </div>
-                    }
+                    <p-multiselect
+                      [options]="stocksForSelectedExchange"
+                      [(ngModel)]="selectedStockIds"
+                      optionLabel="name"
+                      optionValue="id"
+                      dataKey="id"
+                      placeholder="Select stocks"
+                      selectedItemsLabel="{0} stocks selected"
+                      [maxSelectedLabels]="2"
+                      [showToggleAll]="true"
+                      [filter]="false"
+                      emptyMessage="Stocks will load here."
+                      styleClass="selector-multiselect"
+                    />
                   } @else {
                     <div class="selector-empty-state">Select an exchange first.</div>
                   }
