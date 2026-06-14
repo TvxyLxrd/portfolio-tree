@@ -78,16 +78,16 @@ export class App {
   protected instrumentQuery: string | null = null;
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
-    { field: 'ticker', label: '' },
-    { field: 'price', label: '' },
-    { field: 'dayChange', label: '' },
-    { field: 'weight', label: '' },
-    { field: 'marketValue', label: '' },
-    { field: 'pnl', label: '' },
-    { field: 'pe', label: '' },
-    { field: 'dividendYield', label: '' },
-    { field: 'beta', label: '' },
-    { field: 'sector', label: '' },
+    { field: 'ticker', label: 'Ticker' },
+    { field: 'price', label: 'Price' },
+    { field: 'dayChange', label: 'Day %' },
+    { field: 'weight', label: 'Weight' },
+    { field: 'marketValue', label: 'Market value' },
+    { field: 'pnl', label: 'P&L' },
+    { field: 'pe', label: 'P/E' },
+    { field: 'dividendYield', label: 'Dividend' },
+    { field: 'beta', label: 'Beta' },
+    { field: 'sector', label: 'Sector' },
   ];
   protected readonly gridTheme = themeQuartz;
 
@@ -105,7 +105,7 @@ export class App {
 
   protected readonly autoGroupColumnDef: ColDef<PortfolioRow> = {
     field: 'name',
-    headerName: '',
+    headerName: 'Instrument / group',
     pinned: 'left',
     width: 240,
     minWidth: 160,
@@ -122,62 +122,62 @@ export class App {
   protected readonly columnDefs: ColDef<PortfolioRow>[] = [
     {
       field: 'ticker',
-      headerName: '',
+      headerName: 'Ticker',
       cellClass: 'ticker-cell',
     },
     {
       field: 'price',
-      headerName: '',
+      headerName: 'Price',
       valueFormatter: this.currencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'dayChange',
-      headerName: '',
+      headerName: 'Day %',
       valueFormatter: this.percentFormatter,
       cellClassRules: this.changeClassRules,
       type: 'numericColumn',
     },
     {
       field: 'weight',
-      headerName: '',
+      headerName: 'Weight',
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'marketValue',
-      headerName: '',
+      headerName: 'Market value',
       valueFormatter: this.integerCurrencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'pnl',
-      headerName: '',
+      headerName: 'P&L',
       valueFormatter: this.signedCurrencyFormatter,
       cellClassRules: this.changeClassRules,
       type: 'numericColumn',
     },
     {
       field: 'pe',
-      headerName: '',
+      headerName: 'P/E',
       valueFormatter: this.decimalFormatter,
       type: 'numericColumn',
     },
     {
       field: 'dividendYield',
-      headerName: '',
+      headerName: 'Dividend',
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'beta',
-      headerName: '',
+      headerName: 'Beta',
       valueFormatter: this.decimalFormatter,
       type: 'numericColumn',
     },
     {
       field: 'sector',
-      headerName: '',
+      headerName: 'Sector',
     },
   ];
 
