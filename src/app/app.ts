@@ -115,7 +115,6 @@ export class App {
   protected selectedExchangeId?: string;
   protected readonly selectorListStyle = { 'max-height': '13.5rem' };
   protected readonly stockListStyle = { 'max-height': '13.5rem' };
-  protected stockSearchActive = false;
   protected stockSearchQuery = '';
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
@@ -304,24 +303,12 @@ export class App {
     }
   }
 
-  protected activateStockSearch(): void {
-    if (this.instrumentSelectorStep !== 'stock') {
-      return;
-    }
-
-    this.stockSearchActive = true;
-    window.setTimeout(() => {
-      document.querySelector<HTMLInputElement>('.instrument-selector-title-search')?.focus();
-    });
-  }
-
   protected setStockSearch(event: Event): void {
     this.stockSearchQuery = (event.target as HTMLInputElement).value;
   }
 
   protected clearStockSearch(): void {
     this.stockSearchQuery = '';
-    this.stockSearchActive = false;
   }
 
   protected setFilteredStocksSelection(checked: boolean): void {
@@ -513,7 +500,6 @@ export class App {
   }
 
   private resetStockSearch(): void {
-    this.stockSearchActive = false;
     this.stockSearchQuery = '';
   }
 

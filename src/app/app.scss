@@ -184,29 +184,24 @@
     font-size: 0.8125rem;
   }
 
-  .instrument-selector-title-button {
-    overflow: hidden;
+  .instrument-selector-title-field {
+    display: block;
     width: 100%;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    cursor: text;
-    font: inherit;
-    text-align: left;
-    white-space: nowrap;
-    text-overflow: ellipsis;
   }
 
   .instrument-selector-title-search {
     width: 100%;
     min-height: 2rem;
-    padding: 0 0.25rem;
+    padding: 0 0.25rem 0 1.75rem;
     border: 0;
     background: transparent;
     box-shadow: none;
     color: var(--text-primary);
     font: inherit;
+  }
+
+  .instrument-selector-title-field .p-inputicon {
+    color: var(--text-secondary);
   }
 
   .instrument-selector-title-search:enabled:focus {

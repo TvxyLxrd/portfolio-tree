@@ -106,7 +106,8 @@
             }
             <div class="instrument-selector-step-title">
               @if (instrumentSelectorStep === 'stock') {
-                @if (stockSearchActive) {
+                <p-iconfield class="instrument-selector-title-field">
+                  <p-inputicon class="pi pi-search" />
                   <input
                     pInputText
                     class="instrument-selector-title-search"
@@ -118,29 +119,11 @@
                     (keydown.escape)="clearStockSearch()"
                     (click)="$event.stopPropagation()"
                   />
-                } @else {
-                  <button
-                    class="instrument-selector-title-button"
-                    type="button"
-                    aria-label="Search ticker"
-                    (click)="activateStockSearch()"
-                  >
-                    {{ instrumentSelectorTitle }}
-                  </button>
-                }
+                </p-iconfield>
               } @else {
                 <strong>{{ instrumentSelectorTitle }}</strong>
               }
             </div>
-            @if (instrumentSelectorStep === 'stock') {
-              <p-button
-                icon="pi pi-times"
-                [text]="true"
-                severity="secondary"
-                ariaLabel="Close instrument selector"
-                (onClick)="instrumentSelector.hide()"
-              />
-            }
           </div>
 
           <div class="instrument-selector-section">
