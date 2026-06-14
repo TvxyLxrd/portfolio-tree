@@ -65,8 +65,9 @@ interface Stock {
 }
 
 type InstrumentSelectionRule = {
-  type: 'stock';
-  stockId: string;
+  type: 'exchange' | 'stock';
+  exchangeId?: string;
+  stockId?: string;
 };
 
 type InstrumentSelectorStep = 'country' | 'exchange' | 'stock';
@@ -104,6 +105,7 @@ export class App {
   protected countries: Country[] = [];
   protected exchanges: Exchange[] = [];
   protected stocks: Stock[] = [];
+  protected selectedExchangeIds: string[] = [];
   protected selectedStockIds: string[] = [];
   protected selectedCountryId?: string;
   protected selectedExchangeId?: string;
@@ -268,6 +270,12 @@ export class App {
     this.loadStocks();
   }
 
+  protected openExchangeFromList(event: Event | { originalEvent?: Event }, exchange: Exchange): void {
+    const originalEvent = event instanceof Event ? event : event.originalEvent;
+    originalEvent?.stopPropagation();
+    this.selectExchange(exchange);
+  }
+
   protected goToPreviousInstrumentStep(): void {
     if (this.instrumentSelectorStep === 'stock') {
       this.instrumentSelectorStep = 'exchange';
@@ -339,10 +347,17 @@ export class App {
   }
 
   protected buildSelectionRules(): InstrumentSelectionRule[] {
-    return Array.from(new Set(this.selectedStockIds)).map((stockId) => ({
-      type: 'stock',
+    const exchangeRules = Array.from(new Set(this.selectedExchangeIds)).map((exchangeId) => ({
+      type: 'exchange' as const,
+      exchangeId,
+    }));
+
+    const stockRules = Array.from(new Set(this.selectedStockIds)).map((stockId) => ({
+      type: 'stock' as const,
       stockId,
     }));
+
+    return [...exchangeRules, ...stockRules];
   }
 
   protected get exchangesForSelectedCountry(): Exchange[] {

@@ -150,6 +150,12 @@ body {
   font-size: 0.75rem;
 }
 
+.instrument-selector-popover .selector-row-action {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+}
+
 .instrument-selector-popover .selector-multiselect {
   width: calc(100% - 1.5rem);
   margin: 0 0.75rem;

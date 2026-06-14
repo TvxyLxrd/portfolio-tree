@@ -139,20 +139,29 @@
                 <section class="selector-column selector-column-single">
                   <p-listbox
                     [options]="exchangesForSelectedCountry"
-                    [(ngModel)]="selectedExchangeId"
+                    [(ngModel)]="selectedExchangeIds"
                     optionLabel="name"
                     optionValue="id"
                     dataKey="id"
+                    [multiple]="true"
+                    [checkbox]="true"
+                    [showToggleAll]="false"
                     [listStyle]="selectorListStyle"
                     [checkmark]="false"
                     emptyMessage="Exchanges will load here."
                     styleClass="selector-listbox"
-                    (onChange)="onExchangeChange($event.value)"
                   >
                     <ng-template #item let-exchange>
                       <div class="selector-listbox-row">
                         <span>{{ exchange.name }}</span>
-                        <i class="pi pi-chevron-right" aria-hidden="true"></i>
+                        <p-button
+                          icon="pi pi-chevron-right"
+                          [text]="true"
+                          severity="secondary"
+                          [ariaLabel]="'Open ' + exchange.name"
+                          styleClass="selector-row-action"
+                          (onClick)="openExchangeFromList($event, exchange)"
+                        />
                       </div>
                     </ng-template>
                   </p-listbox>
