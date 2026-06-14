@@ -105,7 +105,7 @@ export class App {
 
   protected readonly autoGroupColumnDef: ColDef<PortfolioRow> = {
     field: 'name',
-    headerName: 'Instrument / group',
+    headerName: '',
     pinned: 'left',
     width: 240,
     minWidth: 160,
@@ -122,62 +122,62 @@ export class App {
   protected readonly columnDefs: ColDef<PortfolioRow>[] = [
     {
       field: 'ticker',
-      headerName: 'Ticker',
+      headerName: '',
       cellClass: 'ticker-cell',
     },
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: '',
       valueFormatter: this.currencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'dayChange',
-      headerName: 'Day %',
+      headerName: '',
       valueFormatter: this.percentFormatter,
       cellClassRules: this.changeClassRules,
       type: 'numericColumn',
     },
     {
       field: 'weight',
-      headerName: 'Weight',
+      headerName: '',
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'marketValue',
-      headerName: 'Market value',
+      headerName: '',
       valueFormatter: this.integerCurrencyFormatter,
       type: 'numericColumn',
     },
     {
       field: 'pnl',
-      headerName: 'P&L',
+      headerName: '',
       valueFormatter: this.signedCurrencyFormatter,
       cellClassRules: this.changeClassRules,
       type: 'numericColumn',
     },
     {
       field: 'pe',
-      headerName: 'P/E',
+      headerName: '',
       valueFormatter: this.decimalFormatter,
       type: 'numericColumn',
     },
     {
       field: 'dividendYield',
-      headerName: 'Dividend',
+      headerName: '',
       valueFormatter: this.percentFormatter,
       type: 'numericColumn',
     },
     {
       field: 'beta',
-      headerName: 'Beta',
+      headerName: '',
       valueFormatter: this.decimalFormatter,
       type: 'numericColumn',
     },
     {
       field: 'sector',
-      headerName: 'Sector',
+      headerName: '',
     },
   ];
 
