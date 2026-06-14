@@ -74,23 +74,20 @@
     </div>
 
     <div class="toolbar-group grid-controls">
-      <p-iconfield class="compact-search-control" styleClass="compact-search">
-        <p-inputicon styleClass="pi pi-search" />
-        <p-select
-          styleClass="instrument-select"
-          [options]="instrumentOptions"
-          [(ngModel)]="instrumentQuery"
-          [editable]="true"
-          placeholder="Add instrument"
-          ariaLabel="Add instrument"
-        />
-      </p-iconfield>
+      <p-select
+        class="instrument-select-control"
+        [options]="instrumentOptions"
+        [(ngModel)]="instrumentQuery"
+        placeholder="Add instrument"
+        ariaLabel="Add instrument"
+      />
 
-      <p-iconfield class="filter-search-control" styleClass="filter-search">
-        <p-inputicon styleClass="pi pi-search" />
+      <p-iconfield class="filter-search-control">
+        <p-inputicon class="pi pi-search" />
         <input
           pInputText
           type="search"
+          [fluid]="true"
           placeholder="Filter"
           aria-label="Filter"
           (input)="setQuickFilter($event)"
