@@ -3,14 +3,12 @@
     <div class="header-actions">
       <p-button
         class="sync-control"
-        styleClass="icon-button sync-button"
         icon="pi pi-refresh"
         [text]="true"
         ariaLabel="Price sync"
       />
       <p-button
         class="ai-control"
-        styleClass="ai-button"
         label="AI"
         icon="pi pi-sparkles"
         iconPos="right"
@@ -30,7 +28,6 @@
       </p-iconfield>
       <p-button
         class="avatar-control"
-        styleClass="avatar-button"
         icon="pi pi-user"
         [rounded]="true"
         [outlined]="true"
@@ -43,7 +40,6 @@
     <div class="toolbar-group portfolio-controls">
       <p-button
         class="menu-control"
-        styleClass="menu-button"
         icon="pi pi-bars"
         [text]="true"
         ariaLabel="Open portfolio tree"
@@ -56,6 +52,7 @@
         [(ngModel)]="selectedPortfolio"
         placeholder="Portfolio --"
         ariaLabel="Portfolio"
+        [fluid]="true"
       />
 
       <p-menu
@@ -66,7 +63,6 @@
       />
       <p-button
         class="portfolio-menu-control"
-        styleClass="icon-button"
         icon="pi pi-ellipsis-v"
         [text]="true"
         ariaLabel="Portfolio actions"
@@ -81,6 +77,7 @@
           [(ngModel)]="instrumentQuery"
           [suggestions]="instrumentSuggestions"
           [dropdown]="true"
+          [fluid]="true"
           [showEmptyMessage]="false"
           dropdownMode="current"
           placeholder="Add instrument"
@@ -106,8 +103,7 @@
     <div class="toolbar-group utility-controls">
       @if (activeTreeFilter()) {
         <p-button
-          class="filter-chip-control"
-          styleClass="filter-chip"
+          class="active-filter-control"
           [label]="activeTreeFilter()"
           icon="pi pi-times"
           iconPos="right"
@@ -117,14 +113,12 @@
       }
       <p-button
         class="more-control"
-        styleClass="icon-button"
         icon="pi pi-ellipsis-v"
         [text]="true"
         ariaLabel="More actions"
       />
       <p-button
         class="fullscreen-control"
-        styleClass="fullscreen-button"
         icon="pi pi-window-maximize"
         ariaLabel="Fullscreen"
       />
@@ -155,7 +149,6 @@
 </main>
 
 <p-drawer
-  styleClass="portfolio-drawer"
   position="left"
   [visible]="drawerVisible()"
   (visibleChange)="drawerVisible.set($event)"
@@ -168,7 +161,6 @@
     <aside class="drawer-content" aria-label="Portfolio drawer">
       <p-button
         class="drawer-close-control"
-        styleClass="drawer-close-button"
         icon="pi pi-times"
         [text]="true"
         ariaLabel="Close portfolio drawer"
