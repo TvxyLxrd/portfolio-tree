@@ -336,7 +336,67 @@ export class App {
 
   protected loadStocks(event: ScrollerLazyLoadEvent | { first: number; rows: number }): void {
     void event;
-    this.stocks = [];
+    const stocksByExchange: Record<string, Stock[]> = {
+      nyse: [
+        { id: 'ko', exchangeId: 'nyse', ticker: 'KO', name: 'Coca-Cola Co' },
+        { id: 'jpm', exchangeId: 'nyse', ticker: 'JPM', name: 'JPMorgan Chase & Co' },
+        { id: 'dis', exchangeId: 'nyse', ticker: 'DIS', name: 'Walt Disney Co' },
+      ],
+      nasdaq: [
+        { id: 'aapl', exchangeId: 'nasdaq', ticker: 'AAPL', name: 'Apple Inc' },
+        { id: 'msft', exchangeId: 'nasdaq', ticker: 'MSFT', name: 'Microsoft Corp' },
+        { id: 'nvda', exchangeId: 'nasdaq', ticker: 'NVDA', name: 'NVIDIA Corp' },
+      ],
+      cboe: [
+        { id: 'spy', exchangeId: 'cboe', ticker: 'SPY', name: 'SPDR S&P 500 ETF Trust' },
+        { id: 'qqq', exchangeId: 'cboe', ticker: 'QQQ', name: 'Invesco QQQ Trust' },
+        { id: 'iwm', exchangeId: 'cboe', ticker: 'IWM', name: 'iShares Russell 2000 ETF' },
+      ],
+      xetra: [
+        { id: 'sap', exchangeId: 'xetra', ticker: 'SAP', name: 'SAP SE' },
+        { id: 'sie', exchangeId: 'xetra', ticker: 'SIE', name: 'Siemens AG' },
+        { id: 'alv', exchangeId: 'xetra', ticker: 'ALV', name: 'Allianz SE' },
+      ],
+      frankfurt: [
+        { id: 'bmw', exchangeId: 'frankfurt', ticker: 'BMW', name: 'Bayerische Motoren Werke AG' },
+        { id: 'bas', exchangeId: 'frankfurt', ticker: 'BAS', name: 'BASF SE' },
+        { id: 'dte', exchangeId: 'frankfurt', ticker: 'DTE', name: 'Deutsche Telekom AG' },
+      ],
+      stuttgart: [
+        { id: 'vow3', exchangeId: 'stuttgart', ticker: 'VOW3', name: 'Volkswagen AG' },
+        { id: 'dbk', exchangeId: 'stuttgart', ticker: 'DBK', name: 'Deutsche Bank AG' },
+        { id: 'ifx', exchangeId: 'stuttgart', ticker: 'IFX', name: 'Infineon Technologies AG' },
+      ],
+      tase: [
+        { id: '7203', exchangeId: 'tase', ticker: '7203', name: 'Toyota Motor Corp' },
+        { id: '6758', exchangeId: 'tase', ticker: '6758', name: 'Sony Group Corp' },
+        { id: '9984', exchangeId: 'tase', ticker: '9984', name: 'SoftBank Group Corp' },
+      ],
+      osaka: [
+        { id: '6861', exchangeId: 'osaka', ticker: '6861', name: 'Keyence Corp' },
+        { id: '7974', exchangeId: 'osaka', ticker: '7974', name: 'Nintendo Co Ltd' },
+        { id: '9983', exchangeId: 'osaka', ticker: '9983', name: 'Fast Retailing Co Ltd' },
+      ],
+      nagoya: [
+        { id: '7267', exchangeId: 'nagoya', ticker: '7267', name: 'Honda Motor Co Ltd' },
+        { id: '6501', exchangeId: 'nagoya', ticker: '6501', name: 'Hitachi Ltd' },
+        { id: '9432', exchangeId: 'nagoya', ticker: '9432', name: 'Nippon Telegraph and Telephone Corp' },
+      ],
+    };
+
+    const query = this.stockSearch.trim().toLocaleLowerCase();
+    const exchangeStocks = this.selectedExchangeId
+      ? stocksByExchange[this.selectedExchangeId] ?? []
+      : [];
+
+    this.stocks = query
+      ? exchangeStocks.filter(
+          (stock) =>
+            stock.ticker.toLocaleLowerCase().includes(query) ||
+            stock.name.toLocaleLowerCase().includes(query),
+        )
+      : exchangeStocks;
+    this.stocks.forEach((stock) => this.stockExchangeLookup.set(stock.id, stock.exchangeId));
 
     // TODO: call API to load stocks by exchangeId, search, offset and limit.
     // Remember to fill stockExchangeLookup for each loaded stock.
@@ -407,14 +467,35 @@ export class App {
   }
 
   private loadCountries(): void {
-    this.countries = [];
+    this.countries = [
+      { id: 'us', name: 'United States' },
+      { id: 'de', name: 'Germany' },
+      { id: 'jp', name: 'Japan' },
+    ];
 
     // TODO: call API to load countries.
   }
 
   private loadExchanges(countryId: string): void {
-    void countryId;
-    this.exchanges = [];
+    const exchangesByCountry: Record<string, Exchange[]> = {
+      us: [
+        { id: 'nyse', countryId: 'us', name: 'New York Stock Exchange', code: 'NYSE' },
+        { id: 'nasdaq', countryId: 'us', name: 'Nasdaq Stock Market', code: 'NASDAQ' },
+        { id: 'cboe', countryId: 'us', name: 'Cboe Global Markets', code: 'CBOE' },
+      ],
+      de: [
+        { id: 'xetra', countryId: 'de', name: 'Xetra', code: 'XETR' },
+        { id: 'frankfurt', countryId: 'de', name: 'Frankfurt Stock Exchange', code: 'XFRA' },
+        { id: 'stuttgart', countryId: 'de', name: 'Stuttgart Stock Exchange', code: 'XSTU' },
+      ],
+      jp: [
+        { id: 'tase', countryId: 'jp', name: 'Tokyo Stock Exchange', code: 'TSE' },
+        { id: 'osaka', countryId: 'jp', name: 'Osaka Exchange', code: 'OSE' },
+        { id: 'nagoya', countryId: 'jp', name: 'Nagoya Stock Exchange', code: 'NSE' },
+      ],
+    };
+
+    this.exchanges = exchangesByCountry[countryId] ?? [];
 
     // TODO: call API to load exchanges by country.
   }
