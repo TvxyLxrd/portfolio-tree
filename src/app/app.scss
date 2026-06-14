@@ -101,13 +101,6 @@ button {
   gap: 10px;
 }
 
-p-autocomplete.instrument-autocomplete-control,
-p-iconfield.filter-search-control {
-  width: 190px;
-  height: 32px;
-  flex: 0 0 190px;
-}
-
 .utility-controls {
   justify-content: flex-end;
   gap: 8px;
@@ -225,7 +218,6 @@ p-iconfield.filter-search-control {
   font-size: 10px;
 }
 
-.portfolio-select,
 .control-button,
 .filter-chip {
   display: inline-flex;
@@ -238,15 +230,6 @@ p-iconfield.filter-search-control {
   transition:
     border-color 160ms ease,
     background 160ms ease;
-}
-
-.portfolio-select {
-  width: 190px;
-  min-width: 190px;
-  height: 32px;
-  padding: 0;
-  border-radius: 7px;
-  font-size: 12px;
 }
 
 .control-button {
@@ -461,48 +444,6 @@ p-iconfield.filter-search-control {
     color: #4f596a;
   }
 
-  .p-select.portfolio-select {
-    display: flex;
-    align-items: center;
-    width: 190px;
-    min-width: 190px;
-    height: 32px;
-    min-height: 32px;
-    padding: 0;
-    border-color: #cfd5df;
-    border-radius: 7px;
-    font-size: 12px;
-  }
-
-  .p-select.portfolio-select .p-select-label {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    height: 30px;
-    padding: 0 12px;
-    line-height: 1;
-  }
-
-  .p-select.portfolio-select .p-select-dropdown {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 30px;
-    flex: 0 0 32px;
-  }
-
-  .p-select.portfolio-select .p-select-dropdown-icon {
-    width: 11px;
-    height: 11px;
-  }
-
-  .p-autocomplete.instrument-autocomplete-control .p-autocomplete-input,
-  .p-autocomplete.instrument-autocomplete-control .p-autocomplete-dropdown,
-  .p-iconfield.filter-search-control .p-inputtext {
-    height: 32px;
-  }
-
   .p-button.filter-chip {
     max-width: 180px;
     height: 32px;
@@ -634,10 +575,6 @@ p-iconfield.filter-search-control {
     gap: 12px;
   }
 
-  .portfolio-select {
-    min-width: 190px;
-  }
-
   .control-button span {
     display: none;
   }
@@ -719,9 +656,6 @@ p-iconfield.filter-search-control {
     flex: 1;
     width: auto;
     min-width: 0;
-    height: 38px;
-    padding: 0 11px;
-    font-size: 13px;
   }
 
   .grid-controls {
@@ -736,12 +670,10 @@ p-iconfield.filter-search-control {
     flex: 1;
     width: auto;
     min-width: 0;
-    height: 38px;
   }
 
   p-iconfield.filter-search-control {
     width: min(150px, 40vw);
-    height: 38px;
     flex: 0 1 150px;
   }
 
@@ -804,23 +736,6 @@ p-iconfield.filter-search-control {
       height: 38px;
     }
 
-    .p-select.portfolio-select {
-      width: 100%;
-      min-width: 0;
-      height: 38px;
-    }
-
-    .p-select.portfolio-select .p-select-label {
-      height: 36px;
-      line-height: 1;
-    }
-
-    .p-autocomplete.instrument-autocomplete-control .p-autocomplete-input,
-    .p-autocomplete.instrument-autocomplete-control .p-autocomplete-dropdown,
-    .p-iconfield.filter-search-control .p-inputtext {
-      height: 38px;
-    }
-
     .p-button.menu-button,
     .p-button.fullscreen-button {
       width: 38px;
@@ -858,13 +773,6 @@ p-iconfield.filter-search-control {
   .toolbar {
     grid-template-rows: 38px 42px;
     padding: 8px;
-  }
-
-  .portfolio-select span {
-    max-width: 90px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
   }
 
   .header-search input {
