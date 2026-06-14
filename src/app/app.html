@@ -1,12 +1,8 @@
 <main class="workspace" [class.drawer-open]="drawerVisible()">
   <header class="topbar">
     <div class="header-actions">
-      <div class="sync-action">
-        <p-button icon="pi pi-refresh" [text]="true" ariaLabel="Price sync" />
-      </div>
-      <div class="ai-action">
-        <p-button label="Submit" />
-      </div>
+      <p-button icon="pi pi-refresh" ariaLabel="Price sync" />
+      <p-button label="Submit" />
       <p-iconfield>
         <p-inputicon class="pi pi-search" />
         <input
@@ -17,25 +13,17 @@
           (input)="setQuickFilter($event)"
         />
       </p-iconfield>
-      <p-button
-        icon="pi pi-user"
-        [rounded]="true"
-        [outlined]="true"
-        ariaLabel="User profile"
-      />
+      <p-button icon="pi pi-user" ariaLabel="User profile" />
     </div>
   </header>
 
   <section class="toolbar" aria-label="Portfolio controls">
     <div class="toolbar-group portfolio-controls">
-      <div class="drawer-toggle-action">
-        <p-button
-          icon="pi pi-bars"
-          [text]="true"
-          ariaLabel="Open portfolio tree"
-          (onClick)="drawerVisible.set(!drawerVisible())"
-        />
-      </div>
+      <p-button
+        icon="pi pi-bars"
+        ariaLabel="Open portfolio tree"
+        (onClick)="drawerVisible.set(!drawerVisible())"
+      />
 
       <p-select
         [options]="portfolioOptions"
@@ -52,7 +40,6 @@
       />
       <p-button
         icon="pi pi-ellipsis-v"
-        [text]="true"
         ariaLabel="Portfolio actions"
         (onClick)="portfolioActionsMenu.toggle($event)"
       />
@@ -84,20 +71,7 @@
     </div>
 
     <div class="toolbar-group utility-controls">
-      @if (activeTreeFilter()) {
-        <div class="active-filter-action">
-          <p-button
-            [label]="activeTreeFilter()"
-            icon="pi pi-times"
-            iconPos="right"
-            [outlined]="true"
-            (onClick)="clearFilter()"
-          />
-        </div>
-      }
-      <div class="more-action">
-        <p-button icon="pi pi-ellipsis-v" [text]="true" ariaLabel="More actions" />
-      </div>
+      <p-button icon="pi pi-ellipsis-v" ariaLabel="More actions" />
       <p-button icon="pi pi-window-maximize" ariaLabel="Fullscreen" />
     </div>
   </section>
@@ -131,18 +105,4 @@
   (visibleChange)="drawerVisible.set($event)"
   [modal]="false"
   [dismissible]="false"
-  [showCloseIcon]="false"
->
-  <ng-template #headless>
-    <aside class="drawer-content" aria-label="Portfolio drawer">
-      <div class="drawer-close-action">
-        <p-button
-          icon="pi pi-times"
-          [text]="true"
-          ariaLabel="Close portfolio drawer"
-          (onClick)="drawerVisible.set(false)"
-        />
-      </div>
-    </aside>
-  </ng-template>
-</p-drawer>
+/>
