@@ -98,6 +98,11 @@ body {
   font-weight: 500;
 }
 
+.instrument-selector-popover .selector-search-shell {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--selector-line);
+}
+
 .instrument-selector-popover .selector-list {
   min-height: 14rem;
   border: 1px solid var(--selector-line);
@@ -154,11 +159,6 @@ body {
 .instrument-selector-popover .selector-column-stocks {
   position: relative;
   grid-template-rows: auto auto minmax(0, 1fr);
-}
-
-.instrument-selector-popover .selector-column-stocks .selector-search-field {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--selector-line);
 }
 
 .instrument-selector-popover .selector-list-row,

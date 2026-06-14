@@ -159,16 +159,18 @@
               @case ('stock') {
                 <section class="selector-column selector-column-single selector-column-stocks">
                   <header>Stocks</header>
-                  <p-iconfield class="selector-search-field">
-                    <p-inputicon class="pi pi-search" />
-                    <input
-                      pInputText
-                      type="search"
-                      placeholder="Search stocks"
-                      [ngModel]="stockSearch"
-                      (ngModelChange)="onStockSearchChange($event)"
-                    />
-                  </p-iconfield>
+                  <div class="selector-search-shell">
+                    <p-iconfield class="selector-search-field">
+                      <p-inputicon class="pi pi-search" />
+                      <input
+                        pInputText
+                        type="search"
+                        placeholder="Search stocks"
+                        [ngModel]="stockSearch"
+                        (ngModelChange)="onStockSearchChange($event)"
+                      />
+                    </p-iconfield>
+                  </div>
 
                   @if (selectedExchangeId) {
                     <p-scroller
