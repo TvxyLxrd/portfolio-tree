@@ -1,5 +1,5 @@
 :host {
-  --drawer-width: clamp(320px, 31vw, 470px);
+  --drawer-width: 20rem;
   --line: #e4e9f0;
   --surface: #ffffff;
   --green: #138a4b;
@@ -28,7 +28,7 @@
   margin-left: var(--drawer-width);
 }
 
-.workspace.drawer-open p-button.menu-control {
+.workspace.drawer-open .drawer-toggle-action {
   display: none;
 }
 
@@ -191,7 +191,7 @@
   height: 100%;
 }
 
-.drawer-close-control {
+.drawer-close-action {
   position: absolute;
   z-index: 2;
   top: 1rem;
@@ -221,7 +221,7 @@
     margin-left: 0;
   }
 
-  .workspace.drawer-open p-button.menu-control {
+  .workspace.drawer-open .drawer-toggle-action {
     display: inline-flex;
   }
 
@@ -234,8 +234,8 @@
     gap: 6px;
   }
 
-  p-button.sync-control,
-  p-button.ai-control {
+  .sync-action,
+  .ai-action {
     display: none;
   }
 
@@ -268,8 +268,8 @@
     gap: 4px;
   }
 
-  p-button.more-control,
-  p-button.active-filter-control {
+  .more-action,
+  .active-filter-action {
     display: none;
   }
 
