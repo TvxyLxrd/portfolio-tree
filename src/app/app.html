@@ -58,19 +58,19 @@
         ariaLabel="Portfolio"
       />
 
-      <p-button
-        class="toolbar-icon-control"
-        styleClass="icon-button"
-        icon="pi pi-pencil"
-        [text]="true"
-        ariaLabel="Rename portfolio"
+      <p-menu
+        #portfolioActionsMenu
+        [model]="portfolioMenuItems"
+        [popup]="true"
+        appendTo="body"
       />
       <p-button
-        class="toolbar-icon-control"
+        class="portfolio-menu-control"
         styleClass="icon-button"
-        icon="pi pi-plus"
+        icon="pi pi-ellipsis-v"
         [text]="true"
-        ariaLabel="Add portfolio"
+        ariaLabel="Portfolio actions"
+        (onClick)="portfolioActionsMenu.toggle($event)"
       />
     </div>
 

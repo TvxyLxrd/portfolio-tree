@@ -15,11 +15,13 @@ import {
   AutoCompleteCompleteEvent,
   AutoCompleteModule,
 } from 'primeng/autocomplete';
+import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
@@ -55,6 +57,7 @@ interface ColumnOption {
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    MenuModule,
     SelectModule,
   ],
   templateUrl: './app.html',
@@ -64,6 +67,11 @@ export class App {
   protected readonly drawerVisible = signal(false);
   protected readonly activeTreeFilter = signal('');
   protected readonly portfolioOptions: string[] = [];
+  protected readonly portfolioMenuItems: MenuItem[] = [
+    { label: 'New tree', icon: 'pi pi-plus-circle' },
+    { label: 'Edit', icon: 'pi pi-pen-to-square' },
+    { label: 'Delete', icon: 'pi pi-trash' },
+  ];
   protected readonly instrumentOptions: string[] = [];
   protected instrumentSuggestions: string[] = [];
   protected selectedPortfolio: string | null = null;
