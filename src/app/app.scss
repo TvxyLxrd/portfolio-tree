@@ -368,17 +368,19 @@
   color: #182235;
 }
 
-::ng-deep .instrument-selector-popover .selector-listbox-row,
-::ng-deep .instrument-selector-popover .selector-stock-row,
-::ng-deep .instrument-selector-popover .selector-select-all-row {
+::ng-deep .instrument-selector-popover .selector-listbox-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-
-::ng-deep .instrument-selector-popover .selector-listbox-row {
   justify-content: space-between;
   width: 100%;
+}
+
+::ng-deep .instrument-selector-popover .selector-select-all-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline-start: 0.625rem;
 }
 
 ::ng-deep .instrument-selector-popover .selector-row-action {
