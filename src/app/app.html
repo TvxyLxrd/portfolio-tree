@@ -122,7 +122,7 @@
                     [listStyle]="selectorListStyle"
                     [checkmark]="false"
                     emptyMessage="Countries will load here."
-                    styleClass="selector-listbox"
+                    styleClass="selector-listbox selector-navigation-listbox"
                     (onChange)="onCountryChange($event.value)"
                   >
                     <ng-template #item let-country>
@@ -149,7 +149,7 @@
                     [listStyle]="selectorListStyle"
                     [checkmark]="false"
                     emptyMessage="Exchanges will load here."
-                    styleClass="selector-listbox"
+                    styleClass="selector-listbox selector-navigation-listbox"
                   >
                     <ng-template #item let-exchange>
                       <div class="selector-listbox-row">
