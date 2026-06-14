@@ -1,17 +1,25 @@
 :host {
   --drawer-width: 20rem;
-  --line: #e4e9f0;
+  --line: #e2e8f0;
   --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --text-primary: #182235;
+  --text-secondary: #647084;
+  --control-height: 2.5rem;
+  --control-radius: 0.625rem;
+  --control-font-size: 0.875rem;
   --green: #138a4b;
   --red: #d13c4d;
   display: block;
   min-width: 0;
   min-height: 100dvh;
+  color: var(--text-primary);
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .workspace {
   display: grid;
-  grid-template-rows: 74px 76px minmax(0, 1fr);
+  grid-template-rows: 64px 72px minmax(0, 1fr);
   width: 100%;
   height: 100dvh;
   min-width: 0;
@@ -42,12 +50,12 @@
 
 .topbar {
   justify-content: flex-end;
-  padding: 0 28px;
+  padding: 0 24px;
 }
 
 .toolbar {
-  gap: 28px;
-  padding: 0 22px;
+  gap: 24px;
+  padding: 0 24px;
 }
 
 .header-actions,
@@ -57,30 +65,32 @@
 }
 
 .header-actions {
-  gap: 10px;
+  gap: 12px;
 }
 
 .portfolio-controls {
   gap: 8px;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .grid-controls {
   flex: 1;
   justify-content: center;
   min-width: 0;
-  gap: 10px;
+  gap: 12px;
 }
 
 .utility-controls {
   justify-content: flex-end;
-  min-width: 150px;
+  min-width: 148px;
   gap: 8px;
 }
 
 .grid-shell {
   min-height: 0;
   padding: 0;
-  background: #fbfcfe;
+  background: var(--surface-soft);
 }
 
 .portfolio-grid {
@@ -88,34 +98,118 @@
   width: 100%;
   height: 100%;
   --visual-column-width: 120px;
-  --visual-row-height: 44px;
-  --visual-grid-line: #e4e9f0;
+  --visual-row-height: 42px;
+  --visual-grid-line: #e2e8f0;
   --ag-font-family: Inter, "Segoe UI", sans-serif;
-  --ag-font-size: 13px;
-  --ag-foreground-color: #273044;
-  --ag-secondary-foreground-color: #717a89;
+  --ag-font-size: 14px;
+  --ag-foreground-color: var(--text-primary);
+  --ag-secondary-foreground-color: var(--text-secondary);
   --ag-background-color: #ffffff;
-  --ag-header-background-color: #f8fafc;
-  --ag-header-foreground-color: #616b7c;
-  --ag-border-color: #e4e9f0;
-  --ag-row-border-color: #edf0f4;
+  --ag-header-background-color: var(--surface-soft);
+  --ag-header-foreground-color: var(--text-secondary);
+  --ag-border-color: var(--line);
+  --ag-row-border-color: #edf2f7;
   --ag-selected-row-background-color: #eef3ff;
-  --ag-row-hover-color: #f7f9fc;
+  --ag-row-hover-color: var(--surface-soft);
   --ag-accent-color: #2459e0;
   --ag-wrapper-border-radius: 0;
-  --ag-header-height: 46px;
-  --ag-row-height: 44px;
+  --ag-header-height: 44px;
+  --ag-row-height: 42px;
 }
 
 :host ::ng-deep {
+  .topbar .p-button,
+  .toolbar .p-button {
+    min-height: var(--control-height);
+    font-size: var(--control-font-size);
+    font-weight: 600;
+  }
+
+  .topbar .p-button-icon-only,
+  .toolbar .p-button-icon-only {
+    width: var(--control-height);
+    min-width: var(--control-height);
+    padding-inline: 0;
+  }
+
+  .topbar .p-inputtext,
+  .toolbar .p-inputtext,
+  .toolbar .p-select {
+    min-height: var(--control-height);
+    border-radius: var(--control-radius);
+    font-size: var(--control-font-size);
+  }
+
+  .toolbar .p-select-label,
+  .toolbar .p-autocomplete-input,
+  .topbar .p-inputtext,
+  .toolbar .p-inputtext {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .toolbar .p-select-dropdown,
+  .toolbar .p-autocomplete-dropdown {
+    width: var(--control-height);
+    min-width: var(--control-height);
+    height: var(--control-height);
+    min-height: var(--control-height);
+  }
+
+  .header-actions > p-iconfield {
+    width: 15.75rem;
+  }
+
+  .portfolio-controls p-select {
+    width: 11.25rem;
+  }
+
+  .grid-controls > p-iconfield:first-child {
+    width: 19rem;
+  }
+
+  .grid-controls > p-iconfield:last-child {
+    width: 15rem;
+  }
+
+  .topbar p-iconfield,
+  .toolbar p-iconfield,
+  .topbar .p-inputtext,
+  .toolbar .p-inputtext {
+    display: block;
+  }
+
+  .toolbar p-autocomplete,
+  .toolbar .p-autocomplete {
+    display: flex;
+    width: 100%;
+  }
+
+  .topbar .p-inputtext,
+  .toolbar .p-inputtext,
+  .toolbar p-autocomplete {
+    width: 100%;
+  }
+
+  .toolbar .p-autocomplete-input {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+  }
+
+  .p-iconfield .p-inputicon {
+    color: var(--text-secondary);
+  }
+
   .portfolio-grid .ag-root-wrapper {
     border: 0;
   }
 
   .portfolio-grid .ag-header-cell-text {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.045em;
+    letter-spacing: 0.025em;
+    line-height: 1.25;
     text-transform: uppercase;
   }
 
@@ -128,10 +222,10 @@
   }
 
   .portfolio-grid .ticker-cell {
-    color: #4e596d;
-    font-size: 12px;
-    font-weight: 750;
-    letter-spacing: 0.04em;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
 
   .portfolio-grid .positive-cell {
@@ -146,8 +240,8 @@
 
   .portfolio-grid .ag-status-bar {
     min-height: 36px;
-    color: #697386;
-    background: #fbfcfe;
+    color: var(--text-secondary);
+    background: var(--surface-soft);
   }
 
   .portfolio-grid .ag-center-cols-viewport,
@@ -194,8 +288,8 @@
 .drawer-close-action {
   position: absolute;
   z-index: 2;
-  top: 1rem;
-  right: 1rem;
+  top: 0.875rem;
+  right: 0.875rem;
 }
 
 @media (max-width: 1080px) {
@@ -210,7 +304,7 @@
   }
 
   .workspace {
-    grid-template-rows: 56px 108px minmax(0, 1fr);
+    grid-template-rows: 56px 112px minmax(0, 1fr);
     min-height: 100svh;
     height: 100svh;
     transition: none;
@@ -226,12 +320,12 @@
   }
 
   .topbar {
-    padding: 0 10px;
+    padding: 0 12px;
   }
 
   .header-actions {
     width: 100%;
-    gap: 6px;
+    gap: 8px;
   }
 
   .sync-action,
@@ -243,8 +337,8 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-rows: auto auto;
-    gap: 8px;
-    padding: 8px 10px;
+    gap: 10px;
+    padding: 10px 12px;
     overflow: visible;
   }
 
@@ -258,14 +352,14 @@
     grid-row: 2;
     justify-content: stretch;
     min-width: 0;
-    gap: 6px;
+    gap: 8px;
   }
 
   .utility-controls {
     grid-column: 2;
     grid-row: 1;
     min-width: 0;
-    gap: 4px;
+    gap: 6px;
   }
 
   .more-action,
@@ -289,6 +383,21 @@
   }
 
   :host ::ng-deep {
+    .header-actions > p-iconfield,
+    .portfolio-controls p-select,
+    .grid-controls > p-iconfield:first-child,
+    .grid-controls > p-iconfield:last-child {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .toolbar .p-button,
+    .toolbar .p-inputtext,
+    .toolbar .p-select,
+    .toolbar .p-autocomplete-input {
+      font-size: 0.8125rem;
+    }
+
     .portfolio-grid .ag-root-wrapper,
     .portfolio-grid .ag-root,
     .portfolio-grid .ag-body {
@@ -305,7 +414,7 @@
 
 @media (max-width: 390px) {
   .workspace {
-    grid-template-rows: 52px 104px minmax(0, 1fr);
+    grid-template-rows: 52px 108px minmax(0, 1fr);
   }
 
   .topbar {

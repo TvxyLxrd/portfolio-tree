@@ -16,6 +16,8 @@ body {
   overflow: hidden;
   color: #172033;
   background: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
   font-family:
     Inter,
     "Segoe UI",
@@ -24,4 +26,5 @@ body {
     Arial,
     sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: geometricprecision;
 }
