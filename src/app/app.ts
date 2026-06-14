@@ -256,6 +256,8 @@ export class App {
   protected selectCountry(country: Country): void {
     this.selectedCountryId = country.id;
     this.selectedExchangeId = undefined;
+    this.selectedExchangeIds = [];
+    this.selectedStockIds = [];
     this.instrumentSelectorStep = 'exchange';
     this.resetStockSearch();
     this.stocks = [];
@@ -272,6 +274,9 @@ export class App {
 
   protected selectExchange(exchange: Exchange): void {
     this.selectedExchangeId = exchange.id;
+    if (this.selectedExchangeIds.length === 0) {
+      this.selectedExchangeIds = [exchange.id];
+    }
     this.instrumentSelectorStep = 'stock';
     this.resetStockSearch();
     this.stocks = [];
@@ -297,6 +302,8 @@ export class App {
       this.instrumentSelectorStep = 'country';
       this.selectedCountryId = undefined;
       this.selectedExchangeId = undefined;
+      this.selectedExchangeIds = [];
+      this.selectedStockIds = [];
       this.resetStockSearch();
       this.exchanges = [];
       this.stocks = [];
@@ -374,8 +381,8 @@ export class App {
       ],
     };
 
-    this.stocks = this.selectedExchangeId ? stocksByExchange[this.selectedExchangeId] ?? [] : [];
-    // TODO: call API to load stocks by exchangeId, search, offset and limit.
+    this.stocks = this.stockExchangeIds.flatMap((exchangeId) => stocksByExchange[exchangeId] ?? []);
+    // TODO: call API to load stocks by selected exchange ids, search, offset and limit.
   }
 
   protected buildSelectionRules(): InstrumentSelectionRule[] {
@@ -399,9 +406,9 @@ export class App {
   }
 
   protected get stocksForSelectedExchange(): Stock[] {
-    return this.selectedExchangeId
-      ? this.stocks.filter((stock) => stock.exchangeId === this.selectedExchangeId)
-      : [];
+    const exchangeIds = new Set(this.stockExchangeIds);
+
+    return this.stocks.filter((stock) => exchangeIds.has(stock.exchangeId));
   }
 
   protected get filteredStocksForSelectedExchange(): Stock[] {
@@ -447,6 +454,10 @@ export class App {
     }
 
     if (this.instrumentSelectorStep === 'stock') {
+      if (this.stockExchangeIds.length > 1) {
+        return `Search ${this.stockExchangeIds.length} exchanges`;
+      }
+
       return `Search ${this.selectedExchangeCode ?? this.selectedExchangeName ?? 'exchange'}`;
     }
 
@@ -497,6 +508,14 @@ export class App {
 
   private get selectedExchangeCode(): string | undefined {
     return this.exchanges.find((exchange) => exchange.id === this.selectedExchangeId)?.code;
+  }
+
+  private get stockExchangeIds(): string[] {
+    return this.selectedExchangeIds.length > 0
+      ? Array.from(new Set(this.selectedExchangeIds))
+      : this.selectedExchangeId
+        ? [this.selectedExchangeId]
+        : [];
   }
 
   private resetStockSearch(): void {
