@@ -39,6 +39,11 @@ body {
   width: min(15rem, calc(100vw - 2rem));
 }
 
+.instrument-selector-popover::before,
+.instrument-selector-popover::after {
+  display: none;
+}
+
 .instrument-selector-popover .p-popover-content {
   padding: 0;
 }
