@@ -87,6 +87,64 @@
   gap: 8px;
 }
 
+.instrument-selector-control {
+  display: flex;
+  align-items: center;
+  width: 19rem;
+  height: var(--control-height);
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--control-radius);
+  background: #ffffff;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: var(--control-font-size);
+  font-weight: 500;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.instrument-selector-control:focus-visible {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px #22c55e;
+}
+
+.instrument-selector-control > .pi-search {
+  flex: 0 0 var(--control-height);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.instrument-selector-control > span {
+  flex: 1 1 auto;
+  overflow: hidden;
+  min-width: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.instrument-selector-toggle {
+  display: inline-flex;
+  flex: 0 0 var(--control-height);
+  align-self: stretch;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-left: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font: inherit;
+}
+
+.instrument-selector-toggle:hover {
+  color: var(--text-primary);
+  background: #f1f5f9;
+}
+
 .grid-shell {
   min-height: 0;
   padding: 0;
@@ -141,15 +199,13 @@
   }
 
   .toolbar .p-select-label,
-  .toolbar .p-autocomplete-input,
   .topbar .p-inputtext,
   .toolbar .p-inputtext {
     color: var(--text-primary);
     font-weight: 500;
   }
 
-  .toolbar .p-select-dropdown,
-  .toolbar .p-autocomplete-dropdown {
+  .toolbar .p-select-dropdown {
     width: var(--control-height);
     min-width: var(--control-height);
     height: var(--control-height);
@@ -164,10 +220,6 @@
     width: 11.25rem;
   }
 
-  .grid-controls > p-iconfield:first-child {
-    width: 19rem;
-  }
-
   .grid-controls > p-iconfield:last-child {
     width: 15rem;
   }
@@ -179,22 +231,9 @@
     display: block;
   }
 
-  .toolbar p-autocomplete,
-  .toolbar .p-autocomplete {
-    display: flex;
-    width: 100%;
-  }
-
   .topbar .p-inputtext,
-  .toolbar .p-inputtext,
-  .toolbar p-autocomplete {
+  .toolbar .p-inputtext {
     width: 100%;
-  }
-
-  .toolbar .p-autocomplete-input {
-    flex: 1 1 auto;
-    width: 1%;
-    min-width: 0;
   }
 
   .p-iconfield .p-inputicon {
@@ -385,7 +424,7 @@
   :host ::ng-deep {
     .header-actions > p-iconfield,
     .portfolio-controls p-select,
-    .grid-controls > p-iconfield:first-child,
+    .grid-controls > .instrument-selector-control,
     .grid-controls > p-iconfield:last-child {
       width: 100%;
       min-width: 0;
@@ -393,8 +432,7 @@
 
     .toolbar .p-button,
     .toolbar .p-inputtext,
-    .toolbar .p-select,
-    .toolbar .p-autocomplete-input {
+    .toolbar .p-select {
       font-size: 0.8125rem;
     }
 

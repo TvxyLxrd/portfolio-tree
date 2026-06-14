@@ -11,18 +11,18 @@ import {
   themeQuartz,
 } from 'ag-grid-community';
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
-import {
-  AutoCompleteCompleteEvent,
-  AutoCompleteModule,
-} from 'primeng/autocomplete';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
 import { DrawerModule } from 'primeng/drawer';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
+import { PopoverModule } from 'primeng/popover';
+import { ScrollerLazyLoadEvent, ScrollerModule } from 'primeng/scroller';
 import { SelectModule } from 'primeng/select';
+import { TabsModule } from 'primeng/tabs';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
@@ -46,19 +46,52 @@ interface ColumnOption {
   label: string;
 }
 
+interface Country {
+  id: string;
+  name: string;
+}
+
+interface Exchange {
+  id: string;
+  countryId: string;
+  name: string;
+  code?: string;
+}
+
+interface Stock {
+  id: string;
+  exchangeId: string;
+  ticker: string;
+  name: string;
+}
+
+type InstrumentSelectionRule =
+  | {
+      type: 'exchange';
+      exchangeId: string;
+      excludedStockIds: string[];
+    }
+  | {
+      type: 'stock';
+      stockId: string;
+    };
+
 @Component({
   selector: 'app-root',
   imports: [
     FormsModule,
     AgGridAngular,
-    AutoCompleteModule,
     ButtonModule,
+    CheckboxModule,
     DrawerModule,
     IconFieldModule,
     InputIconModule,
     InputTextModule,
     MenuModule,
+    PopoverModule,
+    ScrollerModule,
     SelectModule,
+    TabsModule,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -72,10 +105,18 @@ export class App {
     { label: 'Edit', icon: 'pi pi-pen-to-square' },
     { label: 'Delete', icon: 'pi pi-trash' },
   ];
-  protected readonly instrumentOptions: string[] = [];
-  protected instrumentSuggestions: string[] = [];
   protected selectedPortfolio: string | null = null;
-  protected instrumentQuery: string | null = null;
+  protected countries: Country[] = [];
+  protected exchanges: Exchange[] = [];
+  protected stocks: Stock[] = [];
+  protected searchResults: Stock[] = [];
+  protected selectedExchangeIds = new Set<string>();
+  protected selectedStockIds = new Set<string>();
+  protected excludedStockIds = new Set<string>();
+  protected selectedCountryId?: string;
+  protected selectedExchangeId?: string;
+  protected stockSearch = '';
+  protected globalSearch = '';
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: 'Ticker' },
@@ -92,6 +133,11 @@ export class App {
   protected readonly gridTheme = themeQuartz;
 
   private gridApi?: GridApi<PortfolioRow>;
+  private readonly stockExchangeLookup = new Map<string, string>();
+
+  constructor() {
+    this.loadCountries();
+  }
 
   protected readonly defaultColDef: ColDef<PortfolioRow> = {
     sortable: false,
@@ -202,14 +248,135 @@ export class App {
     this.gridApi?.setGridOption('quickFilterText', '');
   }
 
-  protected searchInstruments(event: AutoCompleteCompleteEvent): void {
-    const query = event.query.trim().toLocaleLowerCase();
+  protected selectCountry(country: Country): void {
+    this.selectedCountryId = country.id;
+    this.selectedExchangeId = undefined;
+    this.stockSearch = '';
+    this.stocks = [];
+    this.loadExchanges(country.id);
+  }
 
-    this.instrumentSuggestions = query
-      ? this.instrumentOptions.filter((instrument) =>
-          instrument.toLocaleLowerCase().includes(query),
-        )
-      : [...this.instrumentOptions];
+  protected selectExchange(exchange: Exchange): void {
+    this.selectedExchangeId = exchange.id;
+    this.stockSearch = '';
+    this.stocks = [];
+    this.loadStocks({ first: 0, rows: 50 });
+  }
+
+  protected toggleExchange(exchange: Exchange, checked: boolean): void {
+    if (checked) {
+      this.selectedExchangeIds.add(exchange.id);
+    } else {
+      this.selectedExchangeIds.delete(exchange.id);
+      for (const [stockId, exchangeId] of this.stockExchangeLookup) {
+        if (exchangeId === exchange.id) {
+          this.excludedStockIds.delete(stockId);
+        }
+      }
+    }
+  }
+
+  protected toggleStock(stock: Stock, checked: boolean): void {
+    this.stockExchangeLookup.set(stock.id, stock.exchangeId);
+    const exchangeSelected = this.selectedExchangeIds.has(stock.exchangeId);
+
+    if (exchangeSelected) {
+      if (checked) {
+        this.excludedStockIds.delete(stock.id);
+      } else {
+        this.excludedStockIds.add(stock.id);
+      }
+
+      return;
+    }
+
+    if (checked) {
+      this.selectedStockIds.add(stock.id);
+    } else {
+      this.selectedStockIds.delete(stock.id);
+    }
+  }
+
+  protected isExchangeSelected(exchangeId: string): boolean {
+    return this.selectedExchangeIds.has(exchangeId);
+  }
+
+  protected isStockSelected(stock: Stock): boolean {
+    if (this.selectedExchangeIds.has(stock.exchangeId)) {
+      return !this.excludedStockIds.has(stock.id);
+    }
+
+    return this.selectedStockIds.has(stock.id);
+  }
+
+  protected searchInstrument(query: string): void {
+    this.globalSearch = query;
+    this.searchResults = [];
+
+    // TODO: call API to search instruments by ticker or name.
+  }
+
+  protected onStockSearchChange(query: string): void {
+    this.stockSearch = query;
+    this.loadStocks({ first: 0, rows: 50 });
+  }
+
+  protected loadStocks(event: ScrollerLazyLoadEvent | { first: number; rows: number }): void {
+    void event;
+    this.stocks = [];
+
+    // TODO: call API to load stocks by exchangeId, search, offset and limit.
+    // Remember to fill stockExchangeLookup for each loaded stock.
+  }
+
+  protected buildSelectionRules(): InstrumentSelectionRule[] {
+    const exchangeRules: InstrumentSelectionRule[] = Array.from(this.selectedExchangeIds).map(
+      (exchangeId) => ({
+        type: 'exchange',
+        exchangeId,
+        excludedStockIds: Array.from(this.excludedStockIds).filter(
+          (stockId) => this.stockExchangeLookup.get(stockId) === exchangeId,
+        ),
+      }),
+    );
+
+    const stockRules: InstrumentSelectionRule[] = Array.from(this.selectedStockIds).map(
+      (stockId) => ({
+        type: 'stock',
+        stockId,
+      }),
+    );
+
+    return [...exchangeRules, ...stockRules];
+  }
+
+  protected get exchangesForSelectedCountry(): Exchange[] {
+    return this.selectedCountryId
+      ? this.exchanges.filter((exchange) => exchange.countryId === this.selectedCountryId)
+      : [];
+  }
+
+  protected get stocksForSelectedExchange(): Stock[] {
+    return this.selectedExchangeId
+      ? this.stocks.filter((stock) => stock.exchangeId === this.selectedExchangeId)
+      : [];
+  }
+
+  protected get selectionRules(): InstrumentSelectionRule[] {
+    return this.buildSelectionRules();
+  }
+
+  private loadCountries(): void {
+    this.countries = [];
+
+    // TODO: call API to load countries.
+  }
+
+  private loadExchanges(countryId: string): void {
+    void countryId;
+    this.exchanges = [];
+
+    // TODO: call API to load exchanges by country.
   }
 
   private applyResponsiveGrid(): void {
