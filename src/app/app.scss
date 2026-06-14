@@ -285,6 +285,7 @@
 }
 
 ::ng-deep .instrument-selector-popover {
+  margin-top: 2px !important;
   width: 15rem;
 }
 
@@ -322,6 +323,10 @@
   font-size: 0.875rem;
   width: 0 !important;
   min-width: 0 !important;
+}
+
+::ng-deep .instrument-selector-step-title strong {
+  padding-inline-start: 0.25rem;
 }
 
 ::ng-deep .instrument-selector-popover .instrument-selector-title-field.p-iconfield {
