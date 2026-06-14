@@ -28,6 +28,10 @@
   margin-left: var(--drawer-width);
 }
 
+.workspace.drawer-open .drawer-toggle-action {
+  display: none;
+}
+
 .topbar,
 .toolbar {
   display: flex;
@@ -182,6 +186,18 @@
   }
 }
 
+.drawer-content {
+  position: relative;
+  height: 100%;
+}
+
+.drawer-close-action {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  right: 1rem;
+}
+
 @media (max-width: 1080px) {
   .toolbar {
     gap: 12px;
@@ -205,6 +221,10 @@
     margin-left: 0;
   }
 
+  .workspace.drawer-open .drawer-toggle-action {
+    display: inline-flex;
+  }
+
   .topbar {
     padding: 0 10px;
   }
@@ -212,6 +232,11 @@
   .header-actions {
     width: 100%;
     gap: 6px;
+  }
+
+  .sync-action,
+  .ai-action {
+    display: none;
   }
 
   .toolbar {
@@ -241,6 +266,11 @@
     grid-row: 1;
     min-width: 0;
     gap: 4px;
+  }
+
+  .more-action,
+  .active-filter-action {
+    display: none;
   }
 
   .grid-shell {
