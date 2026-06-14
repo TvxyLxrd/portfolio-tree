@@ -42,6 +42,10 @@ button {
   margin-left: var(--drawer-width);
 }
 
+.workspace.drawer-open p-button.menu-control {
+  display: none;
+}
+
 .topbar,
 .toolbar {
   display: flex;
@@ -568,6 +572,20 @@ button {
     font-size: 12px;
   }
 
+  .p-button.drawer-close-button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    padding: 0;
+    border-radius: 8px;
+    color: var(--ink);
+    background: transparent;
+  }
+
+  .p-button.drawer-close-button:hover {
+    background: #f0f3f8;
+  }
+
   .portfolio-grid .ag-root-wrapper {
     border: 0;
   }
@@ -657,8 +675,16 @@ button {
 }
 
 .drawer-content {
+  position: relative;
   height: 100%;
   background: #fff;
+}
+
+.drawer-close-control {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  right: 18px;
 }
 
 @media (max-width: 1080px) {
@@ -690,6 +716,10 @@ button {
   .workspace.drawer-open {
     width: 100%;
     margin-left: 0;
+  }
+
+  .workspace.drawer-open p-button.menu-control {
+    display: inline-flex;
   }
 
   .topbar {

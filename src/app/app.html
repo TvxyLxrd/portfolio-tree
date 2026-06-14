@@ -160,6 +160,15 @@
   [style]="{ width: 'var(--drawer-width)' }"
 >
   <ng-template #headless>
-    <aside class="drawer-content" aria-label="Portfolio drawer"></aside>
+    <aside class="drawer-content" aria-label="Portfolio drawer">
+      <p-button
+        class="drawer-close-control"
+        styleClass="drawer-close-button"
+        icon="pi pi-times"
+        [text]="true"
+        ariaLabel="Close portfolio drawer"
+        (onClick)="drawerVisible.set(false)"
+      />
+    </aside>
   </ng-template>
 </p-drawer>
