@@ -105,24 +105,7 @@
               />
             }
             <div class="instrument-selector-step-title">
-              @if (instrumentSelectorStep === 'stock') {
-                <p-iconfield class="instrument-selector-title-field">
-                  <p-inputicon class="pi pi-search" />
-                  <input
-                    pInputText
-                    class="instrument-selector-title-search"
-                    type="search"
-                    [placeholder]="instrumentSelectorTitle"
-                    [value]="stockSearchQuery"
-                    aria-label="Search ticker"
-                    (input)="setStockSearch($event)"
-                    (keydown.escape)="clearStockSearch()"
-                    (click)="$event.stopPropagation()"
-                  />
-                </p-iconfield>
-              } @else {
-                <strong>{{ instrumentSelectorTitle }}</strong>
-              }
+              <strong>{{ instrumentSelectorTitle }}</strong>
             </div>
           </div>
 
@@ -203,16 +186,29 @@
                       styleClass="selector-listbox selector-stock-listbox"
                     >
                       <ng-template #header>
-                        <label class="selector-select-all-row" for="stock-select-all">
+                        <div class="selector-stock-filter-row">
                           <p-checkbox
                             inputId="stock-select-all"
                             [binary]="true"
                             [ngModel]="allFilteredStocksSelected"
                             [indeterminate]="someFilteredStocksSelected"
+                            ariaLabel="Select all stocks"
                             (onChange)="setFilteredStocksSelection($event.checked)"
                           />
-                          <span>Select all</span>
-                        </label>
+                          <p-iconfield class="selector-stock-filter-field" iconPosition="right">
+                            <input
+                              pInputText
+                              class="instrument-selector-title-search"
+                              type="search"
+                              [value]="stockSearchQuery"
+                              aria-label="Search ticker"
+                              (input)="setStockSearch($event)"
+                              (keydown.escape)="clearStockSearch()"
+                              (click)="$event.stopPropagation()"
+                            />
+                            <p-inputicon class="pi pi-search" />
+                          </p-iconfield>
+                        </div>
                       </ng-template>
                     </p-listbox>
                   } @else {
