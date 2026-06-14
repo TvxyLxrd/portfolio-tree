@@ -11,6 +11,10 @@ import {
   themeQuartz,
 } from 'ag-grid-community';
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
+import {
+  AutoCompleteCompleteEvent,
+  AutoCompleteModule,
+} from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -45,6 +49,7 @@ interface ColumnOption {
   imports: [
     FormsModule,
     AgGridAngular,
+    AutoCompleteModule,
     ButtonModule,
     DrawerModule,
     IconFieldModule,
@@ -60,6 +65,7 @@ export class App {
   protected readonly activeTreeFilter = signal('');
   protected readonly portfolioOptions = ['Portfolio  --'];
   protected readonly instrumentOptions: string[] = [];
+  protected instrumentSuggestions: string[] = [];
   protected selectedPortfolio = 'Portfolio  --';
   protected instrumentQuery: string | null = null;
   protected readonly rowData: PortfolioRow[] = [];
@@ -186,6 +192,16 @@ export class App {
   protected clearFilter(): void {
     this.activeTreeFilter.set('');
     this.gridApi?.setGridOption('quickFilterText', '');
+  }
+
+  protected searchInstruments(event: AutoCompleteCompleteEvent): void {
+    const query = event.query.trim().toLocaleLowerCase();
+
+    this.instrumentSuggestions = query
+      ? this.instrumentOptions.filter((instrument) =>
+          instrument.toLocaleLowerCase().includes(query),
+        )
+      : [...this.instrumentOptions];
   }
 
   private applyResponsiveGrid(): void {

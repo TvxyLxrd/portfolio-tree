@@ -74,12 +74,17 @@
     </div>
 
     <div class="toolbar-group grid-controls">
-      <p-select
-        class="instrument-select-control"
-        [options]="instrumentOptions"
+      <p-autocomplete
+        class="instrument-autocomplete-control"
         [(ngModel)]="instrumentQuery"
+        [suggestions]="instrumentSuggestions"
+        [dropdown]="true"
+        [showEmptyMessage]="false"
+        dropdownMode="current"
         placeholder="Add instrument"
         ariaLabel="Add instrument"
+        dropdownAriaLabel="Show instruments"
+        (completeMethod)="searchInstruments($event)"
       />
 
       <p-iconfield class="filter-search-control">
