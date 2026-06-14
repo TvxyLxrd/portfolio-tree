@@ -141,140 +141,6 @@
 }
 
 :host ::ng-deep {
-  .instrument-selector-popover {
-    width: var(--instrument-selector-width);
-  }
-
-  .instrument-selector-popover .p-popover-content {
-    padding: 0;
-  }
-
-  .instrument-selector-panel {
-    width: var(--instrument-selector-width);
-    padding: 0.75rem;
-  }
-
-  .instrument-selector-step-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .instrument-selector-step-header .p-button {
-    width: 2rem;
-    min-width: 2rem;
-    height: 2rem;
-    min-height: 2rem;
-    padding: 0;
-    color: var(--text-secondary);
-  }
-
-  .instrument-selector-step-title {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    min-width: 0;
-    color: var(--text-primary);
-    font-size: 0.875rem;
-  }
-
-  .instrument-selector-step-header-search .instrument-selector-step-title {
-    font-size: 0.8125rem;
-  }
-
-  .instrument-selector-title-field {
-    display: block;
-    width: 100%;
-  }
-
-  .instrument-selector-title-search {
-    width: 100%;
-    min-height: 2rem;
-    padding: 0 0.25rem 0 1.75rem;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    color: var(--text-primary);
-    font: inherit;
-  }
-
-  .instrument-selector-title-field .p-inputicon {
-    color: var(--text-secondary);
-  }
-
-  .instrument-selector-title-search:enabled:focus {
-    border: 0;
-    box-shadow: none;
-    outline: none;
-  }
-
-  .selector-column {
-    min-width: 0;
-  }
-
-  .selector-listbox {
-    width: 100%;
-    border: 0;
-    background: transparent;
-  }
-
-  .selector-listbox .p-listbox-header {
-    padding: 0;
-    border: 0;
-    background: transparent;
-  }
-
-  .selector-listbox .p-listbox-list {
-    gap: 0;
-    padding: 0;
-  }
-
-  .selector-listbox .p-listbox-option {
-    min-height: 1.75rem;
-    padding: 0.3125rem 0;
-    border-radius: 0;
-    color: var(--text-primary);
-    font-size: 0.8125rem;
-  }
-
-  .selector-listbox-row,
-  .selector-stock-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-width: 0;
-    gap: 0.75rem;
-  }
-
-  .selector-row-action {
-    width: 1.5rem;
-    min-width: 1.5rem;
-    height: 1.5rem;
-    min-height: 1.5rem;
-    padding: 0;
-    color: var(--text-secondary);
-  }
-
-  .selector-stock-listbox .p-listbox-option {
-    gap: 0.75rem;
-    justify-content: flex-start;
-  }
-
-  .selector-select-all-row {
-    display: flex;
-    align-items: center;
-    min-height: 1.75rem;
-    gap: 0.75rem;
-    padding: 0.3125rem 0;
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: 0.8125rem;
-    font-weight: 700;
-  }
-
   .topbar .p-button,
   .toolbar .p-button {
     min-height: var(--control-height);
@@ -416,6 +282,112 @@
     );
     background-size: 100% var(--visual-row-height);
   }
+}
+
+::ng-deep .instrument-selector-popover {
+  width: 15rem;
+}
+
+::ng-deep .instrument-selector-popover .p-popover-content {
+  padding: 0;
+}
+
+::ng-deep .instrument-selector-popover .instrument-selector-panel {
+  width: 15rem;
+  padding: 0.75rem;
+}
+
+::ng-deep .instrument-selector-popover .instrument-selector-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+::ng-deep .instrument-selector-popover .instrument-selector-step-header .p-button {
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  color: #647084;
+}
+
+::ng-deep .instrument-selector-popover .instrument-selector-step-title {
+  align-items: center;
+  color: #182235;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  font-size: 0.875rem;
+  width: 0 !important;
+  min-width: 0 !important;
+}
+
+::ng-deep .instrument-selector-popover .instrument-selector-title-field.p-iconfield {
+  display: block !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+::ng-deep .instrument-selector-popover .instrument-selector-title-search.p-inputtext {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0 !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+}
+
+::ng-deep .instrument-selector-popover .selector-listbox .p-listbox-option,
+::ng-deep .instrument-selector-popover .selector-select-all-row {
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+}
+
+::ng-deep .instrument-selector-popover .selector-column {
+  min-width: 0;
+}
+
+::ng-deep .instrument-selector-popover .selector-listbox {
+  width: 100%;
+  border: 0;
+  background: transparent;
+}
+
+::ng-deep .instrument-selector-popover .selector-listbox .p-listbox-header,
+::ng-deep .instrument-selector-popover .selector-listbox .p-listbox-list {
+  padding: 0;
+}
+
+::ng-deep .instrument-selector-popover .selector-listbox .p-listbox-option,
+::ng-deep .instrument-selector-popover .selector-select-all-row {
+  min-height: 1.75rem;
+  padding-block: 0.3125rem;
+  color: #182235;
+}
+
+::ng-deep .instrument-selector-popover .selector-listbox-row,
+::ng-deep .instrument-selector-popover .selector-stock-row,
+::ng-deep .instrument-selector-popover .selector-select-all-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+::ng-deep .instrument-selector-popover .selector-listbox-row {
+  justify-content: space-between;
+  width: 100%;
+}
+
+::ng-deep .instrument-selector-popover .selector-row-action {
+  width: 1.5rem;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0;
+  color: #647084;
 }
 
 .drawer-content {
