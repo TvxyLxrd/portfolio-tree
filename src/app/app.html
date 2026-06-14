@@ -17,11 +17,12 @@
         [outlined]="true"
         ariaLabel="AI assistant"
       />
-      <p-iconfield class="header-search-control" styleClass="header-search">
-        <p-inputicon styleClass="pi pi-search" />
+      <p-iconfield class="header-search-control">
+        <p-inputicon class="pi pi-search" />
         <input
           pInputText
           type="search"
+          [fluid]="true"
           placeholder="Instrument search"
           aria-label="Instrument search"
           (input)="setQuickFilter($event)"
@@ -73,18 +74,20 @@
     </div>
 
     <div class="toolbar-group grid-controls">
-      <p-autocomplete
-        class="instrument-autocomplete-control"
-        [(ngModel)]="instrumentQuery"
-        [suggestions]="instrumentSuggestions"
-        [dropdown]="true"
-        [showEmptyMessage]="false"
-        dropdownMode="current"
-        placeholder="Add instrument"
-        ariaLabel="Add instrument"
-        dropdownAriaLabel="Show instruments"
-        (completeMethod)="searchInstruments($event)"
-      />
+      <p-iconfield class="instrument-autocomplete-control">
+        <p-inputicon class="pi pi-search" />
+        <p-autocomplete
+          [(ngModel)]="instrumentQuery"
+          [suggestions]="instrumentSuggestions"
+          [dropdown]="true"
+          [showEmptyMessage]="false"
+          dropdownMode="current"
+          placeholder="Add instrument"
+          ariaLabel="Add instrument"
+          dropdownAriaLabel="Show instruments"
+          (completeMethod)="searchInstruments($event)"
+        />
+      </p-iconfield>
 
       <p-iconfield class="filter-search-control">
         <p-inputicon class="pi pi-search" />
