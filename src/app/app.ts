@@ -100,7 +100,9 @@ export class App {
     { label: 'Edit', icon: 'pi pi-pen-to-square' },
     { label: 'Delete', icon: 'pi pi-trash' },
   ];
+  protected readonly instrumentTriggerOptions: { label: string; value: string }[] = [];
   protected selectedPortfolio: string | null = null;
+  protected instrumentTriggerValue: string[] = [];
   protected instrumentSelectorStep: InstrumentSelectorStep = 'country';
   protected countries: Country[] = [];
   protected exchanges: Exchange[] = [];
