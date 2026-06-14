@@ -63,10 +63,10 @@ interface ColumnOption {
 export class App {
   protected readonly drawerVisible = signal(false);
   protected readonly activeTreeFilter = signal('');
-  protected readonly portfolioOptions = ['Portfolio  --'];
+  protected readonly portfolioOptions: string[] = [];
   protected readonly instrumentOptions: string[] = [];
   protected instrumentSuggestions: string[] = [];
-  protected selectedPortfolio = 'Portfolio  --';
+  protected selectedPortfolio: string | null = null;
   protected instrumentQuery: string | null = null;
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
