@@ -87,166 +87,126 @@
         styleClass="instrument-selector-popover"
       >
         <div class="instrument-selector-panel">
-          <p-tabs value="search">
-            <p-tablist>
-              <p-tab value="search">Search</p-tab>
-              <p-tab value="manual">Manual</p-tab>
-              <p-tab value="selected">Selected</p-tab>
-            </p-tablist>
+          <div class="instrument-selector-step-header">
+            @if (instrumentSelectorStep !== 'country') {
+              <p-button
+                icon="pi pi-chevron-left"
+                [text]="true"
+                severity="secondary"
+                ariaLabel="Back"
+                (onClick)="goToPreviousInstrumentStep()"
+              />
+            }
+            <div class="instrument-selector-step-title">
+              <strong>{{ instrumentSelectorTitle }}</strong>
+              <span>{{ instrumentSelectorSubtitle }}</span>
+            </div>
+          </div>
 
-            <p-tabpanels>
-              <p-tabpanel value="search">
-                <div class="instrument-selector-section">
+          <div class="instrument-selector-section">
+            @switch (instrumentSelectorStep) {
+              @case ('country') {
+                <section class="selector-column selector-column-single">
+                  <header>Countries</header>
+                  <div class="selector-list">
+                    @for (country of countries; track country.id) {
+                      <button
+                        class="selector-list-row"
+                        type="button"
+                        [class.is-active]="country.id === selectedCountryId"
+                        (click)="selectCountry(country)"
+                      >
+                        <span class="selector-list-row-main">
+                          <strong>{{ country.name }}</strong>
+                        </span>
+                        <i class="pi pi-chevron-right" aria-hidden="true"></i>
+                      </button>
+                    } @empty {
+                      <div class="selector-empty-state">Countries will load here.</div>
+                    }
+                  </div>
+                </section>
+              }
+
+              @case ('exchange') {
+                <section class="selector-column selector-column-single">
+                  <header>Exchanges</header>
+                  <div class="selector-list">
+                    @for (exchange of exchangesForSelectedCountry; track exchange.id) {
+                      <button
+                        class="selector-list-row"
+                        type="button"
+                        [class.is-active]="exchange.id === selectedExchangeId"
+                        (click)="selectExchange(exchange)"
+                      >
+                        <span class="selector-list-row-main">
+                          <strong>{{ exchange.name }}</strong>
+                          @if (exchange.code) {
+                            <small>{{ exchange.code }}</small>
+                          }
+                        </span>
+                        <i class="pi pi-chevron-right" aria-hidden="true"></i>
+                      </button>
+                    } @empty {
+                      <div class="selector-empty-state">
+                        Exchanges will load here.
+                      </div>
+                    }
+                  </div>
+                </section>
+              }
+
+              @case ('stock') {
+                <section class="selector-column selector-column-single selector-column-stocks">
+                  <header>Stocks</header>
                   <p-iconfield class="selector-search-field">
                     <p-inputicon class="pi pi-search" />
                     <input
                       pInputText
                       type="search"
-                      placeholder="Search ticker or name"
-                      [ngModel]="globalSearch"
-                      (ngModelChange)="searchInstrument($event)"
+                      placeholder="Search stocks"
+                      [ngModel]="stockSearch"
+                      (ngModelChange)="onStockSearchChange($event)"
                     />
                   </p-iconfield>
 
-                  <div class="selector-list selector-list-results">
-                    @for (stock of searchResults; track stock.id) {
-                      <button class="selector-result-row" type="button">
-                        <strong>{{ stock.ticker }}</strong>
-                        <span>{{ stock.name }}</span>
-                      </button>
-                    } @empty {
-                      <div class="selector-empty-state">
-                        Search results will appear here after API integration.
-                      </div>
-                    }
-                  </div>
-                </div>
-              </p-tabpanel>
-
-              <p-tabpanel value="manual">
-                <div class="manual-selector-grid">
-                  <section class="selector-column">
-                    <header>Countries</header>
-                    <div class="selector-list">
-                      @for (country of countries; track country.id) {
-                        <button
-                          class="selector-list-row"
-                          type="button"
-                          [class.is-active]="country.id === selectedCountryId"
-                          (click)="selectCountry(country)"
-                        >
-                          {{ country.name }}
-                        </button>
-                      } @empty {
-                        <div class="selector-empty-state">Countries will load here.</div>
-                      }
-                    </div>
-                  </section>
-
-                  <section class="selector-column">
-                    <header>Exchanges</header>
-                    <div class="selector-list">
-                      @for (exchange of exchangesForSelectedCountry; track exchange.id) {
-                        <div
-                          class="selector-list-row selector-list-row-checkbox"
-                          [class.is-active]="exchange.id === selectedExchangeId"
-                        >
+                  @if (selectedExchangeId) {
+                    <p-scroller
+                      [items]="stocksForSelectedExchange"
+                      [itemSize]="44"
+                      scrollHeight="260px"
+                      [lazy]="true"
+                      [showLoader]="false"
+                      (onLazyLoad)="loadStocks($event)"
+                    >
+                      <ng-template #item let-stock>
+                        <div class="stock-selector-row">
                           <p-checkbox
                             [binary]="true"
-                            [ngModel]="isExchangeSelected(exchange.id)"
-                            [inputId]="'exchange-' + exchange.id"
-                            (onChange)="toggleExchange(exchange, $event.checked === true)"
+                            [ngModel]="isStockSelected(stock)"
+                            [inputId]="'stock-' + stock.id"
+                            (onChange)="toggleStock(stock, $event.checked === true)"
                           />
-                          <button type="button" (click)="selectExchange(exchange)">
-                            <span>{{ exchange.name }}</span>
-                            @if (exchange.code) {
-                              <small>{{ exchange.code }}</small>
-                            }
-                          </button>
+                          <label [for]="'stock-' + stock.id">
+                            <strong>{{ stock.ticker }}</strong>
+                            <span>{{ stock.name }}</span>
+                          </label>
                         </div>
-                      } @empty {
-                        <div class="selector-empty-state">
-                          @if (selectedCountryId) {
-                            Exchanges will load here.
-                          } @else {
-                            Select a country first.
-                          }
-                        </div>
-                      }
-                    </div>
-                  </section>
+                      </ng-template>
+                    </p-scroller>
 
-                  <section class="selector-column selector-column-stocks">
-                    <header>Stocks</header>
-                    <p-iconfield class="selector-search-field">
-                      <p-inputicon class="pi pi-search" />
-                      <input
-                        pInputText
-                        type="search"
-                        placeholder="Search stocks"
-                        [ngModel]="stockSearch"
-                        (ngModelChange)="onStockSearchChange($event)"
-                      />
-                    </p-iconfield>
-
-                    @if (selectedExchangeId) {
-                      <p-scroller
-                        [items]="stocksForSelectedExchange"
-                        [itemSize]="44"
-                        scrollHeight="260px"
-                        [lazy]="true"
-                        [showLoader]="false"
-                        (onLazyLoad)="loadStocks($event)"
-                      >
-                        <ng-template #item let-stock>
-                          <div class="stock-selector-row">
-                            <p-checkbox
-                              [binary]="true"
-                              [ngModel]="isStockSelected(stock)"
-                              [inputId]="'stock-' + stock.id"
-                              (onChange)="toggleStock(stock, $event.checked === true)"
-                            />
-                            <label [for]="'stock-' + stock.id">
-                              <strong>{{ stock.ticker }}</strong>
-                              <span>{{ stock.name }}</span>
-                            </label>
-                          </div>
-                        </ng-template>
-                      </p-scroller>
-
-                      @if (!stocksForSelectedExchange.length) {
-                        <div class="selector-empty-state selector-empty-state-overlay">
-                          Stocks will load here.
-                        </div>
-                      }
-                    } @else {
-                      <div class="selector-empty-state">Select an exchange first.</div>
-                    }
-                  </section>
-                </div>
-              </p-tabpanel>
-
-              <p-tabpanel value="selected">
-                <div class="instrument-selector-section">
-                  <div class="selector-list selector-list-selected">
-                    @for (rule of selectionRules; track $index) {
-                      <div class="selector-selected-rule">
-                        @if (rule.type === 'exchange') {
-                          Exchange rule: {{ rule.exchangeId }}
-                        } @else {
-                          Stock rule: {{ rule.stockId }}
-                        }
-                      </div>
-                    } @empty {
-                      <div class="selector-empty-state">
-                        Selected instruments will appear here.
+                    @if (!stocksForSelectedExchange.length) {
+                      <div class="selector-empty-state selector-empty-state-overlay">
+                        Stocks will load here.
                       </div>
                     }
-                  </div>
-                </div>
-              </p-tabpanel>
-            </p-tabpanels>
-          </p-tabs>
+                  } @else {
+                    <div class="selector-empty-state">Select an exchange first.</div>
+                  }
+                </section>
+              }
+            }
+          </div>
         </div>
       </p-popover>
 

@@ -22,7 +22,6 @@ import { MenuModule } from 'primeng/menu';
 import { PopoverModule } from 'primeng/popover';
 import { ScrollerLazyLoadEvent, ScrollerModule } from 'primeng/scroller';
 import { SelectModule } from 'primeng/select';
-import { TabsModule } from 'primeng/tabs';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
@@ -76,6 +75,8 @@ type InstrumentSelectionRule =
       stockId: string;
     };
 
+type InstrumentSelectorStep = 'country' | 'exchange' | 'stock';
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -91,7 +92,6 @@ type InstrumentSelectionRule =
     PopoverModule,
     ScrollerModule,
     SelectModule,
-    TabsModule,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -106,17 +106,16 @@ export class App {
     { label: 'Delete', icon: 'pi pi-trash' },
   ];
   protected selectedPortfolio: string | null = null;
+  protected instrumentSelectorStep: InstrumentSelectorStep = 'country';
   protected countries: Country[] = [];
   protected exchanges: Exchange[] = [];
   protected stocks: Stock[] = [];
-  protected searchResults: Stock[] = [];
   protected selectedExchangeIds = new Set<string>();
   protected selectedStockIds = new Set<string>();
   protected excludedStockIds = new Set<string>();
   protected selectedCountryId?: string;
   protected selectedExchangeId?: string;
   protected stockSearch = '';
-  protected globalSearch = '';
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: 'Ticker' },
@@ -251,6 +250,7 @@ export class App {
   protected selectCountry(country: Country): void {
     this.selectedCountryId = country.id;
     this.selectedExchangeId = undefined;
+    this.instrumentSelectorStep = 'exchange';
     this.stockSearch = '';
     this.stocks = [];
     this.loadExchanges(country.id);
@@ -258,9 +258,29 @@ export class App {
 
   protected selectExchange(exchange: Exchange): void {
     this.selectedExchangeId = exchange.id;
+    this.instrumentSelectorStep = 'stock';
     this.stockSearch = '';
     this.stocks = [];
     this.loadStocks({ first: 0, rows: 50 });
+  }
+
+  protected goToPreviousInstrumentStep(): void {
+    if (this.instrumentSelectorStep === 'stock') {
+      this.instrumentSelectorStep = 'exchange';
+      this.selectedExchangeId = undefined;
+      this.stockSearch = '';
+      this.stocks = [];
+      return;
+    }
+
+    if (this.instrumentSelectorStep === 'exchange') {
+      this.instrumentSelectorStep = 'country';
+      this.selectedCountryId = undefined;
+      this.selectedExchangeId = undefined;
+      this.exchanges = [];
+      this.stockSearch = '';
+      this.stocks = [];
+    }
   }
 
   protected toggleExchange(exchange: Exchange, checked: boolean): void {
@@ -307,13 +327,6 @@ export class App {
     }
 
     return this.selectedStockIds.has(stock.id);
-  }
-
-  protected searchInstrument(query: string): void {
-    this.globalSearch = query;
-    this.searchResults = [];
-
-    // TODO: call API to search instruments by ticker or name.
   }
 
   protected onStockSearchChange(query: string): void {
@@ -366,6 +379,33 @@ export class App {
     return this.buildSelectionRules();
   }
 
+  protected get instrumentSelectorTitle(): string {
+    if (this.instrumentSelectorStep === 'exchange') {
+      return 'Choose exchange';
+    }
+
+    if (this.instrumentSelectorStep === 'stock') {
+      return 'Choose token';
+    }
+
+    return 'Choose country';
+  }
+
+  protected get instrumentSelectorSubtitle(): string {
+    const countryName = this.selectedCountryName;
+    const exchangeName = this.selectedExchangeName;
+
+    if (this.instrumentSelectorStep === 'exchange') {
+      return countryName ?? 'Select a country first';
+    }
+
+    if (this.instrumentSelectorStep === 'stock') {
+      return [countryName, exchangeName].filter(Boolean).join(' / ') || 'Select an exchange first';
+    }
+
+    return 'Start with a country';
+  }
+
   private loadCountries(): void {
     this.countries = [];
 
@@ -377,6 +417,14 @@ export class App {
     this.exchanges = [];
 
     // TODO: call API to load exchanges by country.
+  }
+
+  private get selectedCountryName(): string | undefined {
+    return this.countries.find((country) => country.id === this.selectedCountryId)?.name;
+  }
+
+  private get selectedExchangeName(): string | undefined {
+    return this.exchanges.find((exchange) => exchange.id === this.selectedExchangeId)?.name;
   }
 
   private applyResponsiveGrid(): void {
