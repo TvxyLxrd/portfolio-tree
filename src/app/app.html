@@ -128,7 +128,14 @@
                     <ng-template #item let-country>
                       <div class="selector-listbox-row">
                         <span>{{ country.name }}</span>
-                        <i class="pi pi-chevron-right" aria-hidden="true"></i>
+                        <p-button
+                          icon="pi pi-chevron-right"
+                          [text]="true"
+                          severity="secondary"
+                          [ariaLabel]="'Open ' + country.name"
+                          styleClass="selector-row-action"
+                          (onClick)="openCountryFromList($event, country)"
+                        />
                       </div>
                     </ng-template>
                   </p-listbox>

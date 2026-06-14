@@ -264,6 +264,12 @@ export class App {
     this.loadExchanges(country.id);
   }
 
+  protected openCountryFromList(event: Event | { originalEvent?: Event }, country: Country): void {
+    const originalEvent = event instanceof Event ? event : event.originalEvent;
+    originalEvent?.stopPropagation();
+    this.selectCountry(country);
+  }
+
   protected onExchangeChange(exchangeId: string | null): void {
     const exchange = this.exchangesForSelectedCountry.find((item) => item.id === exchangeId);
 
