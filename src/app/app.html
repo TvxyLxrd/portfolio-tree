@@ -91,7 +91,10 @@
         styleClass="instrument-selector-popover"
       >
         <div class="instrument-selector-panel">
-          <div class="instrument-selector-step-header">
+          <div
+            class="instrument-selector-step-header"
+            [class.instrument-selector-step-header-search]="instrumentSelectorStep === 'stock'"
+          >
             @if (instrumentSelectorStep !== 'country') {
               <p-button
                 icon="pi pi-chevron-left"
@@ -102,8 +105,42 @@
               />
             }
             <div class="instrument-selector-step-title">
-              <strong>{{ instrumentSelectorTitle }}</strong>
+              @if (instrumentSelectorStep === 'stock') {
+                @if (stockSearchActive) {
+                  <input
+                    pInputText
+                    class="instrument-selector-title-search"
+                    type="search"
+                    [placeholder]="instrumentSelectorTitle"
+                    [value]="stockSearchQuery"
+                    aria-label="Search ticker"
+                    (input)="setStockSearch($event)"
+                    (keydown.escape)="clearStockSearch()"
+                    (click)="$event.stopPropagation()"
+                  />
+                } @else {
+                  <button
+                    class="instrument-selector-title-button"
+                    type="button"
+                    aria-label="Search ticker"
+                    (click)="activateStockSearch()"
+                  >
+                    {{ instrumentSelectorTitle }}
+                  </button>
+                }
+              } @else {
+                <strong>{{ instrumentSelectorTitle }}</strong>
+              }
             </div>
+            @if (instrumentSelectorStep === 'stock') {
+              <p-button
+                icon="pi pi-times"
+                [text]="true"
+                severity="secondary"
+                ariaLabel="Close instrument selector"
+                (onClick)="instrumentSelector.hide()"
+              />
+            }
           </div>
 
           <div class="instrument-selector-section">
@@ -168,20 +205,33 @@
               @case ('stock') {
                 <section class="selector-column selector-column-single selector-column-stocks">
                   @if (selectedExchangeId) {
-                    <p-multiselect
-                      [options]="stocksForSelectedExchange"
+                    <p-listbox
+                      [options]="filteredStocksForSelectedExchange"
                       [(ngModel)]="selectedStockIds"
                       optionLabel="name"
                       optionValue="id"
                       dataKey="id"
-                      placeholder="Select stocks"
-                      selectedItemsLabel="{0} stocks selected"
-                      [maxSelectedLabels]="2"
-                      [showToggleAll]="true"
-                      [filter]="false"
+                      [multiple]="true"
+                      [checkbox]="true"
+                      [showToggleAll]="false"
+                      [listStyle]="stockListStyle"
+                      [checkmark]="false"
                       emptyMessage="Stocks will load here."
-                      styleClass="selector-multiselect"
-                    />
+                      styleClass="selector-listbox selector-stock-listbox"
+                    >
+                      <ng-template #header>
+                        <label class="selector-select-all-row" for="stock-select-all">
+                          <p-checkbox
+                            inputId="stock-select-all"
+                            [binary]="true"
+                            [ngModel]="allFilteredStocksSelected"
+                            [indeterminate]="someFilteredStocksSelected"
+                            (onChange)="setFilteredStocksSelection($event.checked)"
+                          />
+                          <span>Select all</span>
+                        </label>
+                      </ng-template>
+                    </p-listbox>
                   } @else {
                     <div class="selector-empty-state">Select an exchange first.</div>
                   }

@@ -13,6 +13,7 @@ import {
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
 import { DrawerModule } from 'primeng/drawer';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -78,6 +79,7 @@ type InstrumentSelectorStep = 'country' | 'exchange' | 'stock';
     FormsModule,
     AgGridAngular,
     ButtonModule,
+    CheckboxModule,
     DrawerModule,
     IconFieldModule,
     InputIconModule,
@@ -112,6 +114,9 @@ export class App {
   protected selectedCountryId?: string;
   protected selectedExchangeId?: string;
   protected readonly selectorListStyle = { 'max-height': '13.5rem' };
+  protected readonly stockListStyle = { 'max-height': '13.5rem' };
+  protected stockSearchActive = false;
+  protected stockSearchQuery = '';
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: 'Ticker' },
@@ -253,6 +258,7 @@ export class App {
     this.selectedCountryId = country.id;
     this.selectedExchangeId = undefined;
     this.instrumentSelectorStep = 'exchange';
+    this.resetStockSearch();
     this.stocks = [];
     this.loadExchanges(country.id);
   }
@@ -268,6 +274,7 @@ export class App {
   protected selectExchange(exchange: Exchange): void {
     this.selectedExchangeId = exchange.id;
     this.instrumentSelectorStep = 'stock';
+    this.resetStockSearch();
     this.stocks = [];
     this.loadStocks();
   }
@@ -282,6 +289,7 @@ export class App {
     if (this.instrumentSelectorStep === 'stock') {
       this.instrumentSelectorStep = 'exchange';
       this.selectedExchangeId = undefined;
+      this.resetStockSearch();
       this.stocks = [];
       return;
     }
@@ -290,9 +298,41 @@ export class App {
       this.instrumentSelectorStep = 'country';
       this.selectedCountryId = undefined;
       this.selectedExchangeId = undefined;
+      this.resetStockSearch();
       this.exchanges = [];
       this.stocks = [];
     }
+  }
+
+  protected activateStockSearch(): void {
+    if (this.instrumentSelectorStep !== 'stock') {
+      return;
+    }
+
+    this.stockSearchActive = true;
+    window.setTimeout(() => {
+      document.querySelector<HTMLInputElement>('.instrument-selector-title-search')?.focus();
+    });
+  }
+
+  protected setStockSearch(event: Event): void {
+    this.stockSearchQuery = (event.target as HTMLInputElement).value;
+  }
+
+  protected clearStockSearch(): void {
+    this.stockSearchQuery = '';
+    this.stockSearchActive = false;
+  }
+
+  protected setFilteredStocksSelection(checked: boolean): void {
+    const filteredIds = this.filteredStocksForSelectedExchange.map((stock) => stock.id);
+
+    if (checked) {
+      this.selectedStockIds = Array.from(new Set([...this.selectedStockIds, ...filteredIds]));
+      return;
+    }
+
+    this.selectedStockIds = this.selectedStockIds.filter((stockId) => !filteredIds.includes(stockId));
   }
 
   protected loadStocks(): void {
@@ -301,6 +341,9 @@ export class App {
         { id: 'lly', exchangeId: 'nyse', ticker: 'LLY', name: 'Eli Lilly' },
         { id: 'xom', exchangeId: 'nyse', ticker: 'XOM', name: 'Exxon Mobil' },
         { id: 'v', exchangeId: 'nyse', ticker: 'V', name: 'Visa' },
+        { id: 'ma', exchangeId: 'nyse', ticker: 'MA', name: 'Mastercard' },
+        { id: 'wmt', exchangeId: 'nyse', ticker: 'WMT', name: 'Wallmart' },
+        { id: 'jpm', exchangeId: 'nyse', ticker: 'JPM', name: 'JPMorgan Chase' },
       ],
       nasdaq: [
         { id: 'aapl', exchangeId: 'nasdaq', ticker: 'AAPL', name: 'Apple' },
@@ -374,6 +417,39 @@ export class App {
       : [];
   }
 
+  protected get filteredStocksForSelectedExchange(): Stock[] {
+    const query = this.stockSearchQuery.trim().toLowerCase();
+
+    if (!query) {
+      return this.stocksForSelectedExchange;
+    }
+
+    return this.stocksForSelectedExchange.filter((stock) => {
+      const ticker = stock.ticker.toLowerCase();
+      const name = stock.name.toLowerCase();
+
+      return ticker.includes(query) || name.includes(query);
+    });
+  }
+
+  protected get allFilteredStocksSelected(): boolean {
+    const filteredIds = this.filteredStocksForSelectedExchange.map((stock) => stock.id);
+
+    return (
+      filteredIds.length > 0 &&
+      filteredIds.every((stockId) => this.selectedStockIds.includes(stockId))
+    );
+  }
+
+  protected get someFilteredStocksSelected(): boolean {
+    const filteredIds = this.filteredStocksForSelectedExchange.map((stock) => stock.id);
+
+    return (
+      filteredIds.some((stockId) => this.selectedStockIds.includes(stockId)) &&
+      !this.allFilteredStocksSelected
+    );
+  }
+
   protected get selectionRules(): InstrumentSelectionRule[] {
     return this.buildSelectionRules();
   }
@@ -434,6 +510,11 @@ export class App {
 
   private get selectedExchangeCode(): string | undefined {
     return this.exchanges.find((exchange) => exchange.id === this.selectedExchangeId)?.code;
+  }
+
+  private resetStockSearch(): void {
+    this.stockSearchActive = false;
+    this.stockSearchQuery = '';
   }
 
   private applyResponsiveGrid(): void {
