@@ -5,21 +5,15 @@
         <p-button icon="pi pi-refresh" [text]="true" ariaLabel="Price sync" />
       </div>
       <div class="ai-action">
-        <p-button
-          label="AI"
-          icon="pi pi-sparkles"
-          iconPos="right"
-          [outlined]="true"
-          ariaLabel="AI assistant"
-        />
+        <p-button label="Submit" />
       </div>
       <p-iconfield>
         <p-inputicon class="pi pi-search" />
         <input
           pInputText
           type="search"
-          placeholder="Instrument search"
-          aria-label="Instrument search"
+          placeholder="Search"
+          aria-label="Search"
           (input)="setQuickFilter($event)"
         />
       </p-iconfield>
@@ -46,8 +40,8 @@
       <p-select
         [options]="portfolioOptions"
         [(ngModel)]="selectedPortfolio"
-        placeholder="Portfolio --"
-        ariaLabel="Portfolio"
+        placeholder="Select a City"
+        ariaLabel="Select a City"
       />
 
       <p-menu
@@ -73,9 +67,6 @@
           [dropdown]="true"
           [showEmptyMessage]="false"
           dropdownMode="current"
-          placeholder="Add instrument"
-          ariaLabel="Add instrument"
-          dropdownAriaLabel="Show instruments"
           (completeMethod)="searchInstruments($event)"
         />
       </p-iconfield>
@@ -85,8 +76,8 @@
         <input
           pInputText
           type="search"
-          placeholder="Filter"
-          aria-label="Filter"
+          placeholder="Search"
+          aria-label="Search"
           (input)="setQuickFilter($event)"
         />
       </p-iconfield>
