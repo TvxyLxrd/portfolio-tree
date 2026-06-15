@@ -13,8 +13,10 @@ import {
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
 import { DrawerModule } from 'primeng/drawer';
 import { IconFieldModule } from 'primeng/iconfield';
+import { AngleRightIcon } from 'primeng/icons';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
@@ -60,8 +62,10 @@ interface InstrumentPanelChangeEvent {
     FormsModule,
     AgGridAngular,
     ButtonModule,
+    CheckboxModule,
     DrawerModule,
     IconFieldModule,
+    AngleRightIcon,
     InputIconModule,
     InputTextModule,
     MenuModule,
@@ -144,9 +148,18 @@ export class App {
       return;
     }
 
-    this.selectedExchange = event.itemValue;
-    this.selectedInstrumentOptions = [];
-    this.instrumentPanelLevel.set('tickers');
+    this.openTickerPanel(event.itemValue);
+  }
+
+  protected onInstrumentPanelSelectAll(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (this.instrumentPanelLevel() !== 'exchanges') {
+      return;
+    }
+
+    this.openTickerPanel({ name: 'Stocks USA', code: 'STOCKS_USA' });
   }
 
   protected goBackInstrumentPanel(event: MouseEvent): void {
@@ -156,6 +169,16 @@ export class App {
       this.selectedInstrumentOptions = [];
       this.instrumentPanelLevel.set('exchanges');
     }
+  }
+
+  private openTickerPanel(exchange: InstrumentOption): void {
+    this.selectedExchange = exchange;
+    this.selectedInstrumentOptions = [];
+    this.instrumentPanelLevel.set('tickers');
+
+    setTimeout(() => {
+      this.selectedInstrumentOptions = [];
+    });
   }
 
   protected readonly defaultColDef: ColDef<PortfolioRow> = {

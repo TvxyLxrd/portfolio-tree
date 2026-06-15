@@ -65,6 +65,7 @@ body {
 }
 
 .p-multiselect-overlay:has(.instrument-panel-heading) .instrument-panel-heading,
+.p-multiselect-overlay:has(.instrument-panel-heading) .instrument-panel-select-all,
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-header,
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-option {
   display: grid;
@@ -100,8 +101,12 @@ body {
   padding: 0.25rem var(--instrument-panel-inline) 0.5rem;
 }
 
-.p-multiselect-overlay.instrument-exchange-panel .p-multiselect-header::after {
-  content: "Select all";
+.p-multiselect-overlay:has(.instrument-panel-heading) .instrument-panel-select-all {
+  padding: 0.25rem var(--instrument-panel-inline) 0.5rem;
+  cursor: pointer;
+}
+
+.p-multiselect-overlay:has(.instrument-panel-heading) .instrument-panel-select-all > span {
   min-width: 0;
   color: var(--p-multiselect-option-color, #334155);
   font-size: 1rem;
@@ -109,6 +114,7 @@ body {
 }
 
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-header .p-checkbox,
+.p-multiselect-overlay:has(.instrument-panel-heading) .instrument-panel-select-all .p-checkbox,
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-option .p-checkbox {
   justify-self: start;
 }

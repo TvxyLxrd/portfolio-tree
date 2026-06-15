@@ -66,6 +66,8 @@
         placeholder="Add Instrument"
         [filter]="instrumentPanelLevel() === 'tickers'"
         [maxSelectedLabels]="3"
+        [showHeader]="instrumentPanelLevel() === 'tickers'"
+        [showToggleAll]="instrumentPanelLevel() === 'tickers'"
         [panelStyleClass]="instrumentPanelClass()"
         (onChange)="onInstrumentPanelChange($event)"
         [style]="{ width: '20rem', flex: '0 0 20rem' }"
@@ -79,13 +81,34 @@
             ></span>
             <span class="instrument-panel-title">{{ instrumentPanelTitle() }}</span>
           </div>
+
+          @if (instrumentPanelLevel() === 'exchanges') {
+            <div
+              class="instrument-panel-select-all"
+              role="button"
+              tabindex="0"
+              (click)="onInstrumentPanelSelectAll($event)"
+              (keydown.enter)="onInstrumentPanelSelectAll($event)"
+              (keydown.space)="onInstrumentPanelSelectAll($event)"
+            >
+              <p-checkbox
+                [binary]="true"
+                [ngModel]="false"
+                [readonly]="true"
+                ariaLabel="Select all exchanges"
+              />
+              <span>Select all</span>
+            </div>
+          }
         </ng-template>
 
         <ng-template #item let-option>
           <span class="instrument-option-content">
             <span class="instrument-option-label">{{ option.name }}</span>
             @if (instrumentPanelLevel() === 'exchanges') {
-              <span class="instrument-option-arrow pi pi-chevron-right" aria-hidden="true"></span>
+              <span class="instrument-option-arrow p-cascadeselect-group-icon" aria-hidden="true">
+                <svg data-p-icon="angle-right" />
+              </span>
             }
           </span>
         </ng-template>
