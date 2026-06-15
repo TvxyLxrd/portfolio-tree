@@ -59,194 +59,25 @@
     </div>
 
     <div class="toolbar-group grid-controls">
-      <div
-        #instrumentSelectorTarget
-        class="instrument-selector-anchor"
-        role="button"
-        tabindex="0"
-        aria-label="Add instrument"
-        aria-haspopup="dialog"
-        (click)="instrumentSelector.toggle($event, instrumentSelectorTarget)"
-        (keydown.enter)="instrumentSelector.toggle($event, instrumentSelectorTarget)"
-        (keydown.space)="$event.preventDefault(); instrumentSelector.toggle($event, instrumentSelectorTarget)"
-      >
-        <p-multiselect
-          [options]="instrumentTriggerOptions"
-          [(ngModel)]="instrumentTriggerValue"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="Add instrument"
-          [readonly]="true"
-          [filter]="false"
-          [showToggleAll]="false"
-          [overlayVisible]="false"
-          [tabindex]="-1"
-          ariaLabel="Add instrument"
-          styleClass="instrument-selector-control"
-        />
-      </div>
-
-      <p-popover
-        #instrumentSelector
-        styleClass="instrument-selector-popover"
-      >
-        <div class="instrument-selector-panel">
-          <div
-            class="instrument-selector-step-header"
-            [class.instrument-selector-step-header-search]="instrumentSelectorStep === 'stock'"
-          >
-            @if (instrumentSelectorStep !== 'country') {
-              <p-button
-                icon="pi pi-chevron-left"
-                [text]="true"
-                severity="secondary"
-                ariaLabel="Back"
-                (onClick)="goToPreviousInstrumentStep()"
-              />
-            }
-            <div class="instrument-selector-step-title">
-              <strong>{{ instrumentSelectorTitle }}</strong>
-            </div>
-          </div>
-
-          <div class="instrument-selector-section">
-            @switch (instrumentSelectorStep) {
-              @case ('country') {
-                <section class="selector-column selector-column-single">
-                  <p-listbox
-                    [options]="countries"
-                    [(ngModel)]="selectedCountryId"
-                    optionLabel="name"
-                    optionValue="id"
-                    dataKey="id"
-                    [listStyle]="selectorListStyle"
-                    [checkmark]="false"
-                    emptyMessage="Countries will load here."
-                    styleClass="selector-listbox selector-navigation-listbox"
-                    (onChange)="onCountryChange($event.value)"
-                  >
-                    <ng-template #item let-country>
-                      <div class="selector-listbox-row">
-                        <span>{{ country.name }}</span>
-                        <p-button
-                          icon="pi pi-chevron-right"
-                          [text]="true"
-                          severity="secondary"
-                          [ariaLabel]="'Open ' + country.name"
-                          styleClass="selector-row-action"
-                          (onClick)="openCountryFromList($event, country)"
-                        />
-                      </div>
-                    </ng-template>
-                  </p-listbox>
-                </section>
-              }
-
-              @case ('exchange') {
-                <section class="selector-column selector-column-single">
-                  <p-listbox
-                    [options]="exchangesForSelectedCountry"
-                    [(ngModel)]="selectedExchangeIds"
-                    optionLabel="name"
-                    optionValue="id"
-                    dataKey="id"
-                    [multiple]="true"
-                    [checkbox]="true"
-                    [showToggleAll]="false"
-                    [listStyle]="selectorListStyle"
-                    [checkmark]="false"
-                    emptyMessage="Exchanges will load here."
-                    styleClass="selector-listbox selector-navigation-listbox"
-                  >
-                    <ng-template #item let-exchange>
-                      <div class="selector-listbox-row">
-                        <span>{{ exchange.name }}</span>
-                        <p-button
-                          icon="pi pi-chevron-right"
-                          [text]="true"
-                          severity="secondary"
-                          [ariaLabel]="'Open ' + exchange.name"
-                          styleClass="selector-row-action"
-                          (onClick)="openExchangeFromList($event, exchange)"
-                        />
-                      </div>
-                    </ng-template>
-                  </p-listbox>
-                </section>
-              }
-
-              @case ('stock') {
-                <section class="selector-column selector-column-single selector-column-stocks">
-                  @if (selectedExchangeId) {
-                    <p-listbox
-                      [options]="filteredStocksForSelectedExchange"
-                      [(ngModel)]="selectedStockIds"
-                      optionLabel="name"
-                      optionValue="id"
-                      dataKey="id"
-                      [multiple]="true"
-                      [checkbox]="true"
-                      [showToggleAll]="false"
-                      [listStyle]="stockListStyle"
-                      [checkmark]="false"
-                      emptyMessage="Stocks will load here."
-                      styleClass="selector-listbox selector-stock-listbox"
-                    >
-                      <ng-template #header>
-                        <div class="selector-stock-filter-row">
-                          <p-checkbox
-                            inputId="stock-select-all"
-                            [binary]="true"
-                            [ngModel]="allFilteredStocksSelected"
-                            [indeterminate]="someFilteredStocksSelected"
-                            ariaLabel="Select all stocks"
-                            (onChange)="setFilteredStocksSelection($event.checked)"
-                          />
-                          <p-iconfield class="selector-stock-filter-field" iconPosition="right">
-                            <input
-                              pInputText
-                              class="instrument-selector-title-search"
-                              type="search"
-                              [value]="stockSearchQuery"
-                              aria-label="Search ticker"
-                              (input)="setStockSearch($event)"
-                              (keydown.escape)="clearStockSearch()"
-                              (click)="$event.stopPropagation()"
-                            />
-                            <p-inputicon class="pi pi-search" />
-                          </p-iconfield>
-                        </div>
-                      </ng-template>
-                    </p-listbox>
-                  } @else {
-                    <div class="selector-empty-state">Select an exchange first.</div>
-                  }
-                </section>
-              }
-            }
-          </div>
-        </div>
-      </p-popover>
+      <p-multiselect
+        [options]="cities"
+        [(ngModel)]="selectedCities"
+        optionLabel="name"
+        placeholder="Add Instrument"
+        [maxSelectedLabels]="3"
+        [style]="{ width: '20rem', flex: '0 0 20rem' }"
+      />
 
       <p-iconfield>
         <p-inputicon class="pi pi-search" />
         <input
           pInputText
-          type="search"
+          type="text"
           placeholder="Filter"
           aria-label="Filter"
           (input)="setQuickFilter($event)"
         />
       </p-iconfield>
-
-      <p-multiselect
-        [options]="cities"
-        [(ngModel)]="selectedCities"
-        optionLabel="name"
-        placeholder="Select Cities"
-        [maxSelectedLabels]="3"
-        [style]="{ width: '20rem', flex: '0 0 20rem' }"
-      />
     </div>
 
     <div class="toolbar-group utility-controls">
