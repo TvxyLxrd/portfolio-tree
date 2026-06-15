@@ -60,19 +60,27 @@
 
     <div class="toolbar-group grid-controls">
       <p-multiselect
-        [options]="cities"
-        [(ngModel)]="selectedCities"
+        [options]="exchanges"
+        [(ngModel)]="selectedExchanges"
         optionLabel="name"
         placeholder="Add Instrument"
-        [filter]="true"
+        [filter]="false"
         [maxSelectedLabels]="3"
+        panelStyleClass="instrument-exchange-panel"
         [style]="{ width: '20rem', flex: '0 0 20rem' }"
       >
         <ng-template #header>
           <div class="instrument-panel-heading">
             <span class="instrument-panel-back pi pi-chevron-left" aria-hidden="true"></span>
-            <span class="instrument-panel-title">Search NYSE</span>
+            <span class="instrument-panel-title">Stocks USA</span>
           </div>
+        </ng-template>
+
+        <ng-template #item let-exchange>
+          <span class="instrument-option-content">
+            <span class="instrument-option-label">{{ exchange.name }}</span>
+            <span class="instrument-option-arrow pi pi-chevron-right" aria-hidden="true"></span>
+          </span>
         </ng-template>
       </p-multiselect>
 

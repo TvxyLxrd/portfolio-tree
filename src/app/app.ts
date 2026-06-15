@@ -43,7 +43,7 @@ interface ColumnOption {
   label: string;
 }
 
-interface City {
+interface InstrumentOption {
   name: string;
   code: string;
 }
@@ -74,20 +74,16 @@ export class App {
     { label: 'Edit', icon: 'pi pi-pen-to-square' },
     { label: 'Delete', icon: 'pi pi-trash' },
   ];
-  protected readonly cities: City[] = [
-    { name: 'AAPL', code: 'AAPL' },
-    { name: 'MSFT', code: 'MSFT' },
-    { name: 'NVDA', code: 'NVDA' },
-    { name: 'TSLA', code: 'TSLA' },
-    { name: 'JPM', code: 'JPM' },
-    { name: 'V', code: 'V' },
-    { name: 'KO', code: 'KO' },
-    { name: 'XOM', code: 'XOM' },
-    { name: 'PFE', code: 'PFE' },
-    { name: 'DIS', code: 'DIS' },
+  protected readonly exchanges: InstrumentOption[] = [
+    { name: 'NYSE', code: 'NYSE' },
+    { name: 'Nasdaq', code: 'NASDAQ' },
+    { name: 'NYSE American', code: 'NYSE_AMERICAN' },
+    { name: 'Cboe BZX', code: 'CBOE_BZX' },
+    { name: 'NYSE Arca', code: 'NYSE_ARCA' },
+    { name: 'OTC Market', code: 'OTC_MARKET' },
   ];
   protected selectedPortfolio: string | null = null;
-  protected selectedCities: City[] = [];
+  protected selectedExchanges: InstrumentOption[] = [];
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: 'Ticker' },

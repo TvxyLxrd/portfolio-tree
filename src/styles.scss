@@ -100,6 +100,14 @@ body {
   padding: 0.25rem var(--instrument-panel-inline) 0.5rem;
 }
 
+.p-multiselect-overlay.instrument-exchange-panel .p-multiselect-header::after {
+  content: "Select all";
+  min-width: 0;
+  color: var(--p-multiselect-option-color, #334155);
+  font-size: 1rem;
+  line-height: var(--instrument-panel-control);
+}
+
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-header .p-checkbox,
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-option .p-checkbox {
   justify-self: start;
@@ -125,4 +133,26 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.p-multiselect-overlay.instrument-exchange-panel .instrument-option-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  width: 100%;
+}
+
+.p-multiselect-overlay.instrument-exchange-panel .instrument-option-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.p-multiselect-overlay.instrument-exchange-panel .instrument-option-arrow {
+  flex: 0 0 auto;
+  color: var(--p-multiselect-option-color, #334155);
+  font-size: 1rem;
+  line-height: 1;
 }
