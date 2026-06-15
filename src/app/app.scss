@@ -173,6 +173,12 @@
     color: var(--text-secondary);
   }
 
+  .grid-controls .p-multiselect-dropdown,
+  .grid-controls .p-multiselect-dropdown-icon,
+  .grid-controls p-iconfield .p-inputicon.pi-search {
+    color: var(--p-primary-color, #10b981);
+  }
+
   .portfolio-grid .ag-root-wrapper {
     border: 0;
   }

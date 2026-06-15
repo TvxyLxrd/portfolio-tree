@@ -8,7 +8,24 @@
 @import "@fontsource/inter/cyrillic-700.css";
 @import "primeicons/primeicons.css";
 
+:root {
+  --font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --p-font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html,
 body {
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.p-component,
+.p-inputtext,
+.p-overlay,
+.p-popover,
+.p-menu,
+.p-multiselect,
+.p-select,
+.p-drawer {
   font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
