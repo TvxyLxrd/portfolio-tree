@@ -18,6 +18,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +32,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Export NYSE instruments snapshot
+        if: ${{ env.EODHD_API_TOKEN != '' }}
+        run: npm run data:nyse
 
       - name: Build
         run: npm run build -- --base-href "/${{ github.event.repository.name }}/"

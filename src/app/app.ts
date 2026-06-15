@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
+import { catchError } from 'rxjs';
 import {
   CellClassParams,
   ColDef,
@@ -76,6 +77,8 @@ interface ExchangeInstrumentsResponse {
 })
 export class App implements OnInit {
   private readonly httpClient = inject(HttpClient);
+  private readonly nyseInstrumentsApiUrl = '/api/market-data/exchanges/NYSE/instruments';
+  private readonly nyseInstrumentsSnapshotUrl = 'data/nyse-instruments.json';
 
   protected readonly drawerVisible = signal(false);
   protected readonly activeTreeFilter = signal('');
@@ -219,7 +222,12 @@ export class App implements OnInit {
     this.instrumentsError.set('');
 
     this.httpClient
-      .get<ExchangeInstrumentsResponse>('/api/market-data/exchanges/NYSE/instruments')
+      .get<ExchangeInstrumentsResponse>(this.nyseInstrumentsApiUrl)
+      .pipe(
+        catchError(() =>
+          this.httpClient.get<ExchangeInstrumentsResponse>(this.nyseInstrumentsSnapshotUrl),
+        ),
+      )
       .subscribe({
         next: (response) => {
           this.instrumentOptions = response.instruments;
