@@ -179,6 +179,32 @@
     color: var(--p-primary-color, #10b981);
   }
 
+  .instrument-panel-heading {
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    column-gap: 0.5rem;
+    align-items: center;
+    padding: 0.75rem 1rem 0.25rem;
+  }
+
+  .instrument-panel-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--p-multiselect-option-color, #334155);
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .instrument-panel-title {
+    color: var(--p-multiselect-option-color, #334155);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+  }
+
   .portfolio-grid .ag-root-wrapper {
     border: 0;
   }

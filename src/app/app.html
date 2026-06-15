@@ -64,9 +64,17 @@
         [(ngModel)]="selectedCities"
         optionLabel="name"
         placeholder="Add Instrument"
+        [filter]="true"
         [maxSelectedLabels]="3"
         [style]="{ width: '20rem', flex: '0 0 20rem' }"
-      />
+      >
+        <ng-template #header>
+          <div class="instrument-panel-heading">
+            <span class="instrument-panel-back pi pi-chevron-left" aria-hidden="true"></span>
+            <span class="instrument-panel-title">Search NYSE</span>
+          </div>
+        </ng-template>
+      </p-multiselect>
 
       <div class="card flex flex-wrap justify-center gap-4">
         <p-iconfield>
