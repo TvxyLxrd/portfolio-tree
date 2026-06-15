@@ -133,7 +133,6 @@
   }
 
   .topbar .p-inputtext,
-  .toolbar .p-inputtext,
   .toolbar .p-select {
     min-height: var(--control-height);
     border-radius: var(--control-radius);
@@ -141,8 +140,7 @@
   }
 
   .toolbar .p-select-label,
-  .topbar .p-inputtext,
-  .toolbar .p-inputtext {
+  .topbar .p-inputtext {
     color: var(--text-primary);
     font-weight: 500;
   }
@@ -162,23 +160,16 @@
     width: 11.25rem;
   }
 
-  .grid-controls > p-iconfield:last-child {
-    width: 15rem;
-  }
-
   .topbar p-iconfield,
-  .toolbar p-iconfield,
-  .topbar .p-inputtext,
-  .toolbar .p-inputtext {
+  .topbar .p-inputtext {
     display: block;
   }
 
-  .topbar .p-inputtext,
-  .toolbar .p-inputtext {
+  .topbar .p-inputtext {
     width: 100%;
   }
 
-  .p-iconfield .p-inputicon {
+  .topbar .p-iconfield .p-inputicon {
     color: var(--text-secondary);
   }
 
