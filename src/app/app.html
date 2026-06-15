@@ -68,16 +68,18 @@
         [style]="{ width: '20rem', flex: '0 0 20rem' }"
       />
 
-      <p-iconfield>
-        <p-inputicon class="pi pi-search" />
-        <input
-          pInputText
-          type="text"
-          placeholder="Filter"
-          aria-label="Filter"
-          (input)="setQuickFilter($event)"
-        />
-      </p-iconfield>
+      <div class="card flex flex-wrap justify-center gap-4">
+        <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input
+            type="text"
+            pInputText
+            placeholder="Filter"
+            aria-label="Filter"
+            (input)="setQuickFilter($event)"
+          />
+        </p-iconfield>
+      </div>
     </div>
 
     <div class="toolbar-group utility-controls">

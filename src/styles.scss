@@ -11,3 +11,24 @@
 body {
   font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
+
+.card {
+  background: var(--p-content-background);
+  color: var(--p-content-color);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
