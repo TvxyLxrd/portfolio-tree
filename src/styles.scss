@@ -54,6 +54,7 @@ body {
   --instrument-panel-inline: 1rem;
   --instrument-panel-control: 1.25rem;
   --instrument-panel-gap: 0.75rem;
+  --instrument-panel-list-inline: 0.25rem;
   position: absolute !important;
   top: calc(100% + 0.25rem);
   left: 0;
@@ -111,12 +112,12 @@ body {
 }
 
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-list {
-  padding: 0.25rem 0 0.75rem;
+  padding: 0.25rem var(--instrument-panel-list-inline) 0.75rem;
 }
 
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-option {
   min-height: 2.375rem;
-  padding: 0.5rem var(--instrument-panel-inline);
+  padding: 0.5rem calc(var(--instrument-panel-inline) - var(--instrument-panel-list-inline));
 }
 
 .p-multiselect-overlay:has(.instrument-panel-heading) .p-multiselect-option > span {
