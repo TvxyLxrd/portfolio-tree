@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
@@ -44,17 +43,9 @@ interface ColumnOption {
   label: string;
 }
 
-interface InstrumentOption {
+interface City {
   name: string;
   code: string;
-  exchange: string;
-  type: string;
-}
-
-interface ExchangeInstrumentsResponse {
-  exchange: string;
-  count: number;
-  instruments: InstrumentOption[];
 }
 
 @Component({
@@ -74,22 +65,44 @@ interface ExchangeInstrumentsResponse {
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnInit {
-  private readonly httpClient = inject(HttpClient);
-
+export class App {
   protected readonly drawerVisible = signal(false);
   protected readonly activeTreeFilter = signal('');
-  protected readonly instrumentsLoading = signal(false);
-  protected readonly instrumentsError = signal('');
   protected readonly portfolioOptions: string[] = [];
   protected readonly portfolioMenuItems: MenuItem[] = [
     { label: 'New tree', icon: 'pi pi-plus-circle' },
     { label: 'Edit', icon: 'pi pi-pen-to-square' },
     { label: 'Delete', icon: 'pi pi-trash' },
   ];
-  protected instrumentOptions: InstrumentOption[] = [];
+  protected readonly cities: City[] = [
+    { name: 'New York', code: 'NY' },
+    { name: 'Rome', code: 'RM' },
+    { name: 'London', code: 'LDN' },
+    { name: 'Istanbul', code: 'IST' },
+    { name: 'Paris', code: 'PRS' },
+    { name: 'Berlin', code: 'BER' },
+    { name: 'Madrid', code: 'MAD' },
+    { name: 'Lisbon', code: 'LIS' },
+    { name: 'Amsterdam', code: 'AMS' },
+    { name: 'Zurich', code: 'ZRH' },
+    { name: 'Vienna', code: 'VIE' },
+    { name: 'Prague', code: 'PRG' },
+    { name: 'Warsaw', code: 'WAW' },
+    { name: 'Stockholm', code: 'STO' },
+    { name: 'Copenhagen', code: 'CPH' },
+    { name: 'Oslo', code: 'OSL' },
+    { name: 'Helsinki', code: 'HEL' },
+    { name: 'Dublin', code: 'DUB' },
+    { name: 'Brussels', code: 'BRU' },
+    { name: 'Milan', code: 'MIL' },
+    { name: 'Athens', code: 'ATH' },
+    { name: 'Budapest', code: 'BUD' },
+    { name: 'Bucharest', code: 'BUH' },
+    { name: 'Tokyo', code: 'TYO' },
+    { name: 'Singapore', code: 'SIN' },
+  ];
   protected selectedPortfolio: string | null = null;
-  protected selectedInstruments: InstrumentOption[] = [];
+  protected selectedCities: City[] = [];
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: 'Ticker' },
@@ -106,10 +119,6 @@ export class App implements OnInit {
   protected readonly gridTheme = themeQuartz;
 
   private gridApi?: GridApi<PortfolioRow>;
-
-  ngOnInit(): void {
-    this.loadNyseInstruments();
-  }
 
   protected readonly defaultColDef: ColDef<PortfolioRow> = {
     sortable: false,
@@ -212,25 +221,6 @@ export class App implements OnInit {
   protected clearFilter(): void {
     this.activeTreeFilter.set('');
     this.gridApi?.setGridOption('quickFilterText', '');
-  }
-
-  private loadNyseInstruments(): void {
-    this.instrumentsLoading.set(true);
-    this.instrumentsError.set('');
-
-    this.httpClient
-      .get<ExchangeInstrumentsResponse>('/api/market-data/exchanges/NYSE/instruments')
-      .subscribe({
-        next: (response) => {
-          this.instrumentOptions = response.instruments;
-          this.instrumentsLoading.set(false);
-        },
-        error: () => {
-          this.instrumentOptions = [];
-          this.instrumentsError.set('Unable to load NYSE instruments');
-          this.instrumentsLoading.set(false);
-        },
-      });
   }
 
   private currencyFormatter(params: ValueFormatterParams<PortfolioRow, number>): string {

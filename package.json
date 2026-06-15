@@ -3,11 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json",
+    "start": "ng serve",
     "build": "ng build",
-    "server:dev": "tsx backend/src/main.ts",
-    "server:build": "tsc -p backend/tsconfig.json",
-    "server:start": "node dist/server/main.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -22,17 +19,12 @@
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
     "@fontsource/inter": "^5.2.8",
-    "@nestjs/common": "^11.1.27",
-    "@nestjs/config": "^4.0.4",
-    "@nestjs/core": "^11.1.27",
-    "@nestjs/platform-express": "^11.1.27",
     "@primeuix/themes": "^2.0.3",
     "ag-grid-angular": "^35.3.1",
     "ag-grid-community": "^35.3.1",
     "ag-grid-enterprise": "^35.3.1",
     "primeicons": "^7.0.0",
     "primeng": "^21.1.9",
-    "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -40,9 +32,7 @@
     "@angular/build": "^21.2.15",
     "@angular/cli": "^21.2.15",
     "@angular/compiler-cli": "^21.2.0",
-    "@types/node": "^25.9.3",
     "prettier": "^3.8.1",
-    "tsx": "^4.22.4",
     "typescript": "~5.9.2"
   }
 }

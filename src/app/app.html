@@ -60,13 +60,11 @@
 
     <div class="toolbar-group grid-controls">
       <p-multiselect
-        [options]="instrumentOptions"
-        [(ngModel)]="selectedInstruments"
+        [options]="cities"
+        [(ngModel)]="selectedCities"
         optionLabel="name"
         placeholder="Add Instrument"
         [filter]="true"
-        filterBy="name,code"
-        [loading]="instrumentsLoading()"
         [maxSelectedLabels]="3"
         [style]="{ width: '20rem', flex: '0 0 20rem' }"
       >
