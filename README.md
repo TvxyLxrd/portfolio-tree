@@ -41,18 +41,9 @@ GET /api/market-data/exchanges/NYSE/instruments
 Every push to `main` is built and published automatically by
 `.github/workflows/deploy-pages.yml`.
 
-GitHub Pages is static hosting only. The app first tries the NestJS API and then
-falls back to the generated static snapshot at `data/nyse-instruments.json`.
-Regenerate the snapshot locally with:
-
-```bash
-npm run data:nyse
-```
-
-For automatic snapshot refresh during GitHub Pages deployment, add
-`EODHD_API_TOKEN` as a GitHub Actions secret. Live runtime updates still require
-the NestJS backend to be deployed separately and exposed through `/api` or an
-equivalent reverse proxy.
+GitHub Pages is static hosting only. Live NYSE instruments require the NestJS
+backend to be deployed separately and exposed to the frontend through `/api` or
+an equivalent reverse proxy.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.15.
 
