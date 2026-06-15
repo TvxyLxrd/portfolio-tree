@@ -6,15 +6,44 @@ Angular prototype of an empty portfolio table with a PrimeNG headless drawer.
 
 ```bash
 npm install
+```
+
+Start the backend and frontend in two terminals:
+
+```bash
+npm run server:dev
+```
+
+```bash
 npm start
 ```
 
 Open `http://localhost:4200`.
 
+The market data API runs on `http://localhost:3000` and Angular proxies `/api`
+requests to it. Create a local `.env` file before starting the backend:
+
+```bash
+EODHD_API_TOKEN=your_token_here
+PORT=3000
+FRONTEND_ORIGIN=http://localhost:4200
+```
+
+The frontend never calls EODHD directly and never stores the EODHD token in the
+browser bundle. NYSE instruments are loaded from:
+
+```text
+GET /api/market-data/exchanges/NYSE/instruments
+```
+
 ## GitHub Pages
 
 Every push to `main` is built and published automatically by
 `.github/workflows/deploy-pages.yml`.
+
+GitHub Pages is static hosting only. Live NYSE instruments require the NestJS
+backend to be deployed separately and exposed to the frontend through `/api` or
+an equivalent reverse proxy.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.15.
 
