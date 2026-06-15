@@ -60,26 +60,33 @@
 
     <div class="toolbar-group grid-controls">
       <p-multiselect
-        [options]="exchanges"
-        [(ngModel)]="selectedExchanges"
+        [options]="instrumentOptions()"
+        [(ngModel)]="selectedInstrumentOptions"
         optionLabel="name"
         placeholder="Add Instrument"
-        [filter]="false"
+        [filter]="instrumentPanelLevel() === 'tickers'"
         [maxSelectedLabels]="3"
-        panelStyleClass="instrument-exchange-panel"
+        [panelStyleClass]="instrumentPanelClass()"
+        (onChange)="onInstrumentPanelChange($event)"
         [style]="{ width: '20rem', flex: '0 0 20rem' }"
       >
         <ng-template #header>
           <div class="instrument-panel-heading">
-            <span class="instrument-panel-back pi pi-chevron-left" aria-hidden="true"></span>
-            <span class="instrument-panel-title">Stocks USA</span>
+            <span
+              class="instrument-panel-back pi pi-chevron-left"
+              aria-hidden="true"
+              (click)="goBackInstrumentPanel($event)"
+            ></span>
+            <span class="instrument-panel-title">{{ instrumentPanelTitle() }}</span>
           </div>
         </ng-template>
 
-        <ng-template #item let-exchange>
+        <ng-template #item let-option>
           <span class="instrument-option-content">
-            <span class="instrument-option-label">{{ exchange.name }}</span>
-            <span class="instrument-option-arrow pi pi-chevron-right" aria-hidden="true"></span>
+            <span class="instrument-option-label">{{ option.name }}</span>
+            @if (instrumentPanelLevel() === 'exchanges') {
+              <span class="instrument-option-arrow pi pi-chevron-right" aria-hidden="true"></span>
+            }
           </span>
         </ng-template>
       </p-multiselect>

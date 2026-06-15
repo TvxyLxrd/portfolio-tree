@@ -48,6 +48,12 @@ interface InstrumentOption {
   code: string;
 }
 
+type InstrumentPanelLevel = 'exchanges' | 'tickers';
+
+interface InstrumentPanelChangeEvent {
+  itemValue?: InstrumentOption;
+}
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -82,8 +88,22 @@ export class App {
     { name: 'NYSE Arca', code: 'NYSE_ARCA' },
     { name: 'OTC Market', code: 'OTC_MARKET' },
   ];
+  protected readonly tickers: InstrumentOption[] = [
+    { name: 'AAPL', code: 'AAPL' },
+    { name: 'MSFT', code: 'MSFT' },
+    { name: 'NVDA', code: 'NVDA' },
+    { name: 'TSLA', code: 'TSLA' },
+    { name: 'JPM', code: 'JPM' },
+    { name: 'V', code: 'V' },
+    { name: 'KO', code: 'KO' },
+    { name: 'XOM', code: 'XOM' },
+    { name: 'PFE', code: 'PFE' },
+    { name: 'DIS', code: 'DIS' },
+  ];
+  protected readonly instrumentPanelLevel = signal<InstrumentPanelLevel>('exchanges');
+  protected selectedExchange: InstrumentOption | null = null;
   protected selectedPortfolio: string | null = null;
-  protected selectedExchanges: InstrumentOption[] = [];
+  protected selectedInstrumentOptions: InstrumentOption[] = [];
   protected readonly rowData: PortfolioRow[] = [];
   protected readonly columnOptions: ColumnOption[] = [
     { field: 'ticker', label: 'Ticker' },
@@ -100,6 +120,43 @@ export class App {
   protected readonly gridTheme = themeQuartz;
 
   private gridApi?: GridApi<PortfolioRow>;
+
+  protected instrumentOptions(): InstrumentOption[] {
+    return this.instrumentPanelLevel() === 'exchanges' ? this.exchanges : this.tickers;
+  }
+
+  protected instrumentPanelTitle(): string {
+    if (this.instrumentPanelLevel() === 'tickers') {
+      return `Search ${this.selectedExchange?.name ?? 'NYSE'}`;
+    }
+
+    return 'Stocks USA';
+  }
+
+  protected instrumentPanelClass(): string {
+    return this.instrumentPanelLevel() === 'exchanges'
+      ? 'instrument-exchange-panel'
+      : 'instrument-ticker-panel';
+  }
+
+  protected onInstrumentPanelChange(event: InstrumentPanelChangeEvent): void {
+    if (this.instrumentPanelLevel() !== 'exchanges' || !event.itemValue) {
+      return;
+    }
+
+    this.selectedExchange = event.itemValue;
+    this.selectedInstrumentOptions = [];
+    this.instrumentPanelLevel.set('tickers');
+  }
+
+  protected goBackInstrumentPanel(event: MouseEvent): void {
+    event.stopPropagation();
+
+    if (this.instrumentPanelLevel() === 'tickers') {
+      this.selectedInstrumentOptions = [];
+      this.instrumentPanelLevel.set('exchanges');
+    }
+  }
 
   protected readonly defaultColDef: ColDef<PortfolioRow> = {
     sortable: false,
