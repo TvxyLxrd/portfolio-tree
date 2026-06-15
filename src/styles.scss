@@ -4,6 +4,16 @@
   box-sizing: border-box;
 }
 
+.w-full {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .md\:w-80 {
+    width: 20rem;
+  }
+}
+
 html,
 body {
   width: 100%;
