@@ -238,6 +238,13 @@
           (input)="setQuickFilter($event)"
         />
       </p-iconfield>
+
+      <p-multiselect
+        [options]="cities"
+        [(ngModel)]="selectedCities"
+        optionLabel="name"
+        placeholder="Select Cities"
+      />
     </div>
 
     <div class="toolbar-group utility-controls">

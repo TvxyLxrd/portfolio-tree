@@ -65,6 +65,11 @@ interface Stock {
   name: string;
 }
 
+interface City {
+  name: string;
+  code: string;
+}
+
 type InstrumentSelectionRule = {
   type: 'exchange' | 'stock';
   exchangeId?: string;
@@ -103,8 +108,16 @@ export class App {
     { label: 'Delete', icon: 'pi pi-trash' },
   ];
   protected readonly instrumentTriggerOptions: { label: string; value: string }[] = [];
+  protected readonly cities: City[] = [
+    { name: 'New York', code: 'NY' },
+    { name: 'Rome', code: 'RM' },
+    { name: 'London', code: 'LDN' },
+    { name: 'Istanbul', code: 'IST' },
+    { name: 'Paris', code: 'PRS' },
+  ];
   protected selectedPortfolio: string | null = null;
   protected instrumentTriggerValue: string[] = [];
+  protected selectedCities: City[] = [];
   protected instrumentSelectorStep: InstrumentSelectorStep = 'country';
   protected countries: Country[] = [];
   protected exchanges: Exchange[] = [];
