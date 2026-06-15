@@ -1,4 +1,4 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
@@ -239,12 +239,6 @@ export class App {
 
   protected onGridReady(event: GridReadyEvent<PortfolioRow>): void {
     this.gridApi = event.api;
-    this.applyResponsiveGrid();
-  }
-
-  @HostListener('window:resize')
-  protected onWindowResize(): void {
-    this.applyResponsiveGrid();
   }
 
   protected setQuickFilter(event: Event): void {
@@ -539,29 +533,6 @@ export class App {
 
   private resetStockSearch(): void {
     this.stockSearchQuery = '';
-  }
-
-  private applyResponsiveGrid(): void {
-    const mobile = window.innerWidth <= 760;
-    const columnWidth = mobile ? 96 : 120;
-
-    this.gridApi?.setGridOption('defaultColDef', {
-      ...this.defaultColDef,
-      width: columnWidth,
-      minWidth: mobile ? 72 : 80,
-    });
-    this.gridApi?.setGridOption('autoGroupColumnDef', {
-      ...this.autoGroupColumnDef,
-      pinned: mobile ? null : 'left',
-      minWidth: mobile ? 160 : 200,
-      width: mobile ? 168 : 240,
-    });
-    this.gridApi?.setColumnWidths(
-      this.columnOptions.map((option) => ({
-        key: String(option.field),
-        newWidth: columnWidth,
-      })),
-    );
   }
 
   private currencyFormatter(params: ValueFormatterParams<PortfolioRow, number>): string {
