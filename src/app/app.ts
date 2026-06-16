@@ -50,7 +50,7 @@ interface InstrumentOption {
   code: string;
 }
 
-type InstrumentPanelLevel = 'exchanges' | 'tickers';
+type InstrumentPanelLevel = 'countries' | 'exchanges' | 'tickers';
 
 interface InstrumentPanelChangeEvent {
   itemValue?: InstrumentOption;
@@ -84,6 +84,18 @@ export class App {
     { label: 'Edit', icon: 'pi pi-pen-to-square' },
     { label: 'Delete', icon: 'pi pi-trash' },
   ];
+  protected readonly countries: InstrumentOption[] = [
+    { name: 'Stocks USA', code: 'STOCKS_USA' },
+    { name: 'Stocks China', code: 'STOCKS_CHINA' },
+    { name: 'Stocks Japan', code: 'STOCKS_JAPAN' },
+    { name: 'Stocks Europe', code: 'STOCKS_EUROPE' },
+    { name: 'Stocks UK', code: 'STOCKS_UK' },
+    { name: 'Stocks India', code: 'STOCKS_INDIA' },
+    { name: 'Stocks Australia', code: 'STOCKS_AUSTRALIA' },
+    { name: 'Stocks South Korea', code: 'STOCKS_SOUTH_KOREA' },
+    { name: 'Stocks Taiwan', code: 'STOCKS_TAIWAN' },
+    { name: 'Stocks Singapore', code: 'STOCKS_SINGAPORE' },
+  ];
   protected readonly exchanges: InstrumentOption[] = [
     { name: 'NYSE', code: 'NYSE' },
     { name: 'Nasdaq', code: 'NASDAQ' },
@@ -104,7 +116,8 @@ export class App {
     { name: 'PFE', code: 'PFE' },
     { name: 'DIS', code: 'DIS' },
   ];
-  protected readonly instrumentPanelLevel = signal<InstrumentPanelLevel>('exchanges');
+  protected readonly instrumentPanelLevel = signal<InstrumentPanelLevel>('countries');
+  protected selectedCountry: InstrumentOption | null = null;
   protected selectedExchange: InstrumentOption | null = null;
   protected selectedPortfolio: string | null = null;
   protected selectedInstrumentOptions: InstrumentOption[] = [];
@@ -126,6 +139,10 @@ export class App {
   private gridApi?: GridApi<PortfolioRow>;
 
   protected instrumentOptions(): InstrumentOption[] {
+    if (this.instrumentPanelLevel() === 'countries') {
+      return this.countries;
+    }
+
     return this.instrumentPanelLevel() === 'exchanges' ? this.exchanges : this.tickers;
   }
 
@@ -134,21 +151,36 @@ export class App {
       return `Search ${this.selectedExchange?.name ?? 'NYSE'}`;
     }
 
-    return 'Stocks USA';
+    if (this.instrumentPanelLevel() === 'exchanges') {
+      return this.selectedCountry?.name ?? 'Stocks USA';
+    }
+
+    return 'Search for instrument';
   }
 
   protected instrumentPanelClass(): string {
+    if (this.instrumentPanelLevel() === 'countries') {
+      return 'instrument-country-panel';
+    }
+
     return this.instrumentPanelLevel() === 'exchanges'
       ? 'instrument-exchange-panel'
       : 'instrument-ticker-panel';
   }
 
   protected onInstrumentPanelChange(event: InstrumentPanelChangeEvent): void {
-    if (this.instrumentPanelLevel() !== 'exchanges' || !event.itemValue) {
+    if (!event.itemValue) {
       return;
     }
 
-    this.openTickerPanel(event.itemValue);
+    if (this.instrumentPanelLevel() === 'countries') {
+      this.openExchangePanel(event.itemValue);
+      return;
+    }
+
+    if (this.instrumentPanelLevel() === 'exchanges') {
+      this.openTickerPanel(event.itemValue);
+    }
   }
 
   protected onInstrumentPanelSelectAll(event?: Event): void {
@@ -168,7 +200,25 @@ export class App {
     if (this.instrumentPanelLevel() === 'tickers') {
       this.selectedInstrumentOptions = [];
       this.instrumentPanelLevel.set('exchanges');
+      return;
     }
+
+    if (this.instrumentPanelLevel() === 'exchanges') {
+      this.selectedInstrumentOptions = [];
+      this.selectedExchange = null;
+      this.instrumentPanelLevel.set('countries');
+    }
+  }
+
+  private openExchangePanel(country: InstrumentOption): void {
+    this.selectedCountry = country;
+    this.selectedExchange = null;
+    this.selectedInstrumentOptions = [];
+    this.instrumentPanelLevel.set('exchanges');
+
+    setTimeout(() => {
+      this.selectedInstrumentOptions = [];
+    });
   }
 
   private openTickerPanel(exchange: InstrumentOption): void {

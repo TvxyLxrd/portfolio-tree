@@ -77,6 +77,7 @@
             <span
               class="instrument-panel-back pi pi-chevron-left"
               aria-hidden="true"
+              [class.instrument-panel-back-hidden]="instrumentPanelLevel() === 'countries'"
               (click)="goBackInstrumentPanel($event)"
             ></span>
             <span class="instrument-panel-title">{{ instrumentPanelTitle() }}</span>
@@ -105,7 +106,7 @@
         <ng-template #item let-option>
           <span class="instrument-option-content">
             <span class="instrument-option-label">{{ option.name }}</span>
-            @if (instrumentPanelLevel() === 'exchanges') {
+            @if (instrumentPanelLevel() !== 'tickers') {
               <span class="instrument-option-arrow p-cascadeselect-group-icon" aria-hidden="true">
                 <svg data-p-icon="angle-right" />
               </span>

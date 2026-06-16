@@ -89,6 +89,11 @@ body {
   line-height: 1;
 }
 
+.p-multiselect-overlay:has(.instrument-panel-heading) .instrument-panel-back-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .p-multiselect-overlay:has(.instrument-panel-heading) .instrument-panel-title {
   min-width: 0;
   color: var(--p-multiselect-option-color, #334155);
@@ -141,6 +146,15 @@ body {
   white-space: nowrap;
 }
 
+.p-multiselect-overlay.instrument-country-panel .p-multiselect-option .p-checkbox {
+  display: none;
+}
+
+.p-multiselect-overlay.instrument-country-panel .p-multiselect-option > span {
+  grid-column: 2;
+}
+
+.p-multiselect-overlay.instrument-country-panel .instrument-option-content,
 .p-multiselect-overlay.instrument-exchange-panel .instrument-option-content {
   display: flex;
   align-items: center;
@@ -149,6 +163,7 @@ body {
   width: 100%;
 }
 
+.p-multiselect-overlay.instrument-country-panel .instrument-option-label,
 .p-multiselect-overlay.instrument-exchange-panel .instrument-option-label {
   min-width: 0;
   overflow: hidden;
@@ -156,6 +171,7 @@ body {
   white-space: nowrap;
 }
 
+.p-multiselect-overlay.instrument-country-panel .instrument-option-arrow,
 .p-multiselect-overlay.instrument-exchange-panel .instrument-option-arrow {
   flex: 0 0 auto;
   color: var(--p-multiselect-option-color, #334155);
